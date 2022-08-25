@@ -1,0 +1,8 @@
+namespace test;
+
+func Main(arg) 
+{
+a = 0;
+z = a + 3;
+return z;
+}

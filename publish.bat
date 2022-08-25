@@ -1,0 +1,1 @@
+dotnet publish -c release --self-contained --runtime linux-x64

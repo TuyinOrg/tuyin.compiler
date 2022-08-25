@@ -1,0 +1,17 @@
+digraph
+{
+    "label 6" [ label = "{ label\ 6 | a.1.0=Φ(a.2.2)\nret\ a.1.0 }", shape = record ]
+    "label 2" [ label = "{ label\ 2 | %1=ldc\ 1\na.2.0=%1\n%2=ldc\ 1\ntest\ %2:9 | { <true> T | <false> F } }", shape = record ]
+    "label 4" [ label = "{ label\ 4 | %4=ldc\ 3\na.4.0=%4 }", shape = record ]
+    "label 3" [ label = "{ label\ 3 | %3=ldc\ 2\na.3.0=%3\ngoto\ 11 }", shape = record ]
+    "label 5" [ label = "{ label\ 5 | a.2.1=Φ(a.2.0,a.3.0,a.4.0)\n%5=ldc\ 4\na.2.2=%5\ngoto\ 0 }", shape = record ]
+    "label 1" [ label = "{ label\ 1 | %0=ldc\ 1\ntest\ %0:15 | { <true> T | <false> F } }", shape = record ]
+
+    "label 2":false:c -> "label 4"
+    "label 2":true:c -> "label 3"
+    "label 4" -> "label 5"
+    "label 3" -> "label 5"
+    "label 5" -> "label 1"
+    "label 1":false:c -> "label 6"
+    "label 1":true:c -> "label 2"
+}

@@ -1,0 +1,13 @@
+namespace test;
+
+func Main(arg) 
+{
+arg.a = 1;
+arg.a = 2;
+arg.b = 3;
+return arg;
+
+arg.b = 4;
+a = 2;
+return arg.b + a;
+}

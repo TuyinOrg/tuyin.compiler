@@ -1,0 +1,11 @@
+namespace test;
+
+func Main(arg) 
+{
+x = 1;
+a = 5;
+y = x;
+b = a + 2;
+z = y + b;
+return z;
+}

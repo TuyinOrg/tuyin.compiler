@@ -1,0 +1,48 @@
+%lexer 
+
+(_|[a-z]|[A-Z])(_|[a-z]|[A-Z]|[0-9])*  ^ID
+\/\/.*                                 ^()
+
+%parser
+%parser.class RegexprParser
+%parser.using System
+%parser.using System.Text
+
+LexParser : r;
+
+
+r	: r e
+	| e
+	;
+
+e	: c ID             { AddRole((RegRoot)$1, $2.v); }
+	| c CODE           { AddRole((RegRoot)$1, $2.v); }
+	;
+
+c	: c1               ^$1
+	| '^' c1           ^new RegStartLine((RegRoot)$2)
+	| c1 '$'           ^new RegEndLine((RegRoot)$1)
+	| '^' c1 '$'       ^new RegStartLine(new RegEndLine((RegRoot)$2))
+	;
+
+
+c1 	: c1 '|' t         ^new RegOr((RegRoot)$1, (RegRoot)$3)
+	| t                ^$1
+	;
+
+t	: se               ^$1
+	| t se             ^new RegAnd((RegRoot)$1, (RegRoot)$2)
+	;
+
+se	: '(' c ')'        ^$2
+	| se '*'           ^new RegZeroOrMore((RegRoot)$1)
+	| se '+'           ^new RegOneOrMore((RegRoot)$1)
+	| '.'              ^CreateAny()
+	| '[' rg ']'       ^$2
+	| CH_LIT           ^CreateToken($1)
+	| CH_NOLIT         ^CreateToken($1)
+	| STRING           ^CreateString($1)
+	;
+
+rg	: CH_NOLIT '-' CH_NOLIT      ^CreateRange($1, $3)
+	;

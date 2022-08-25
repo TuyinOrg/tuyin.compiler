@@ -1,0 +1,21 @@
+namespace test;
+
+func Main(arg) {
+var b = 0;		
+if(5) {		
+ c = 1;
+}		
+else if(6) {
+ c = 2;
+  if(8) 
+    c = 9 + 4; 
+  else if(7)
+    c = 5;
+  else 
+    c = 7;
+}
+else
+ c = 3;		
+
+return c;	
+}

@@ -1,0 +1,159 @@
+﻿%lexer
+
+"element"								^ELEMENT
+"line"									^LINE
+"rect"									^RECT
+"ellipse"								^ELLIPSE
+"when"									^WHEN
+"from"									^FROM
+"to"									^TO
+"in"									^IN
+"keydown"								^KEYDOWN
+"keyup"									^KEYUP
+"mousedown"								^MOUSEDOWN
+"mouseup"								^MOUSEUP
+"mousemove"								^MOUSEMOVE
+"mouseenter"							^MOUSEENTER
+"mouseleave"							^MOUSELEAVE
+"left"									^LEFT
+"right"									^RIGHT
+"middle"								^MIDDLE
+"="										^(=)
+"<"										^(<)
+">"										^(>)
+"("										^(()
+")"										^())
+"{"										^({)
+"}"										^(})
+"["										^([)
+"]"										^(])
+"-"										^(-)
+"|"										^(|)
+/*"auto"									^AUTO*/
+/*"..."									^DOT3*/
+\n										^NEWLINE
+"#"([a-z]|[A-Z]|[0-9])+					^HEXCOLOR
+(_|[a-z]|[A-Z])(_|[a-z]|[A-Z]|[0-9])*	^ID
+("-"[0-9]+)|([0-9]+)					^INTEGER
+/*("-"[0-9]+)|([0-9]+).([0-9]+)			^FLOAT*/
+"/*"                                   
+{
+	ReadComment(rd);
+	rd.SetMatch();
+	rd.EndToken(out tk.strRead, out tk.fileName, out tk.line, out tk.startIndex, out tk.endIndex);
+	return false;
+}
+"'"
+{
+	var sb = new StringBuilder();
+	ReadString(rd, sb);
+	rd.SetMatch();
+	rd.EndToken(out tk.strRead, out tk.fileName, out tk.line, out tk.startIndex, out tk.endIndex);
+	tk.strRead = sb.ToString();
+	tk.token = STRING;
+	return true;
+}
+\/\/.*									^() 
+(\ |\n|\r|\t)+							^()
+
+%parser 
+%parser.class TemplateControlParser
+%parser.using LLParserLexerLib
+%parser.using System.Text
+%parser.namespace tui.tool.template
+
+// template
+template<Template>
+	: element_list  												^new Template($1, null)
+	;
+
+element_list<ElementList>
+	:																^new ElementList()
+	| element_list element											^$1.Add($2)
+	;
+
+element<Element>
+	: STRING														^new ElementLabel($1)
+	| DEFINE ID '=' INTEGER											^new Property($1, $3)
+	| LINE HEXCOLOR INTEGER INTEGER INTEGER INTEGER					^new ElementLine($2, $3, $4, $5, $6)
+	| RECT HEXCOLOR INTEGER INTEGER INTEGER INTEGER					^new ElementRect($2, $3, $4, $5, $6)
+	| ELLIPSE HEXCOLOR INTEGER INTEGER INTEGER INTEGER				^new ElementEllipse($2, $3, $4, $5, $6)
+	| ELEMENT INTEGER '=' ID property_list animate_list				^new ElementControl($2, $4, $5, $6)	
+	;
+
+property_list<PropertyList>
+	:																^new PropertyList()
+	| property_list ',' property									^$1.Add($3)
+	;
+
+property<Property>
+	: ID ':' INTEGER													^new Property($1, $3)
+	;
+
+animate_list<AnimateList>
+	:																^new AnimateList()
+	| animate_list NEWLINE animate									^$1.Add($3)
+	;
+
+animate<Animate>
+	:  member FROM INTEGER TO INTEGER IN INTEGER WHEN event_input	^new AnimateTo($1, $3, $5, $7, $9)
+	;
+
+member<Member>
+	: ID 															^new Member($1)
+	| member '.' ID													^$1.Add($3)
+	;
+
+event_input<InputEvent>
+	: event_type event_value										^new InputEvent($1, $2)
+	;
+
+event_type<EventType>
+	: KEYDOWN														^EventType.KeyDown
+	| KEYUP															^EventType.KeyUp
+	| MOUSEDOWN														^EventType.MouseDown
+	| MOUSEUP														^EventType.MouseUp
+	| MOUSEMOVE														^EventType.MouseMove
+	| MOUSEENTER													^EventType.MouseEnter
+	| MOUSELEAVE													^EventType.MouseLeave
+	;
+
+event_value<int>
+	: LEFT															^0
+	| RIGHT															^1
+	| MIDDLE														^2
+	| STRING														^CharToKeys($1.strRead[0])
+	| INTEGER														^int.Parse($1.strRead)
+	;
+
+/*
+layout<TemplateLayout>
+	| layout_line													^new TemplateLayout($1)
+	| layout NEWLINE layout_line									^$1.Add($3)
+	;
+
+layout_line<LayoutLine>
+	: layout_item													^new LayoutLine($1)
+	| layout_line layout_item										^$1.Add($2)
+	;
+
+layout_item<LayoutItem>											
+	: layout_token '>' layout_value									^new LayoutItem($1, $3)
+	| layout_token													^new LayoutItem($1, new LayoutValue(LayoutValueType.Auto, 0))
+	;
+
+layout_token<LayoutToken>
+	: '-'															^new LayoutChar($1)
+	| '|'															^new LayoutChar($1)
+	| DOT3															^new LayoutDyanmic()
+	| INTEGER														^new LayoutIndex($1)
+	| STRING														^new LayoutLabel($1)
+	;
+
+layout_value<LayoutValue>
+	: INTEGER														^new LayoutValue(LayoutValueType.Fixed, $1)
+	| '*'															^new LayoutValue(LayoutValueType.Rate, 1)
+	| *INTEGER '*'													^new LayoutValue(LayoutValueType.Rate, $1)
+	| AUTO															^new LayoutValue(LayoutValueType.Auto, 0)
+	;
+*/

@@ -1,0 +1,131 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	<TargetFramework>netstandard2.1</TargetFramework>
+	<LangVersion>10.0</LangVersion>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <OutputType>Library</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controls\BArrowButton.cs" />
+    <Compile Remove="Controls\BButton.cs" />
+    <Compile Remove="Controls\BButtonState.cs" />
+    <Compile Remove="Controls\BCheckBox.cs" />
+    <Compile Remove="Controls\BColorField.cs" />
+    <Compile Remove="Controls\BColorGradient.cs" />
+    <Compile Remove="Controls\BColorGrid.cs" />
+    <Compile Remove="Controls\BColorIntensity.cs" />
+    <Compile Remove="Controls\BColorPicker.cs" />
+    <Compile Remove="Controls\BColorSlider.cs" />
+    <Compile Remove="Controls\BColorWheel.cs" />
+    <Compile Remove="Controls\BComboBox.cs" />
+    <Compile Remove="Controls\BConditionButton.cs" />
+    <Compile Remove="Controls\BControl.cs" />
+    <Compile Remove="Controls\BCurveEditor.cs" />
+    <Compile Remove="Controls\BCustomDataGrid.cs" />
+    <Compile Remove="Controls\BCustomDrawButton.cs" />
+    <Compile Remove="Controls\BDataGrid.cs" />
+    <Compile Remove="Controls\BGDIGraphics.cs" />
+    <Compile Remove="Controls\BGPUGraphics.cs" />
+    <Compile Remove="Controls\BGraphics.cs" />
+    <Compile Remove="Controls\BGroupBox.cs" />
+    <Compile Remove="Controls\BInputField.cs" />
+    <Compile Remove="Controls\BLabel.cs" />
+    <Compile Remove="Controls\BListView.cs" />
+    <Compile Remove="Controls\BPainter.cs" />
+    <Compile Remove="Controls\BPanel.cs" />
+    <Compile Remove="Controls\BProgressBar.cs" />
+    <Compile Remove="Controls\BRgbColorSilder.cs" />
+    <Compile Remove="Controls\BScrollBar.cs" />
+    <Compile Remove="Controls\BSlideBar.cs" />
+    <Compile Remove="Controls\BSplitLine.cs" />
+    <Compile Remove="Controls\BTab.cs" />
+    <Compile Remove="Controls\BTabControl.cs" />
+    <Compile Remove="Controls\BToolBar.cs" />
+    <Compile Remove="Controls\BTrackBar.cs" />
+    <Compile Remove="Controls\BTreeView.cs" />
+    <Compile Remove="Controls\BUIElement.cs" />
+    <Compile Remove="Controls\GraphicsExpand.cs" />
+    <Compile Remove="Controls\Grid.cs" />
+    <Compile Remove="Controls\GridItem.cs" />
+    <Compile Remove="Controls\GridLength.cs" />
+    <Compile Remove="Controls\GridType.cs" />
+    <Compile Remove="Controls\IBGraphics.cs" />
+    <Compile Remove="Controls\ISizedItem.cs" />
+    <Compile Remove="Controls\IUIElment.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\tool\compute\compute.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="runtimes\linux-x64\native\lib\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Controls\BArrowButton.cs" />
+    <None Include="Controls\BButton.cs" />
+    <None Include="Controls\BButtonState.cs" />
+    <None Include="Controls\BCheckBox.cs" />
+    <None Include="Controls\BColorField.cs" />
+    <None Include="Controls\BColorGradient.cs" />
+    <None Include="Controls\BColorGrid.cs" />
+    <None Include="Controls\BColorIntensity.cs" />
+    <None Include="Controls\BColorPicker.cs" />
+    <None Include="Controls\BColorSlider.cs" />
+    <None Include="Controls\BColorWheel.cs" />
+    <None Include="Controls\BComboBox.cs" />
+    <None Include="Controls\BConditionButton.cs" />
+    <None Include="Controls\BControl.cs">
+      <SubType>Component</SubType>
+    </None>
+    <None Include="Controls\BCurveEditor.cs" />
+    <None Include="Controls\BCustomDataGrid.cs" />
+    <None Include="Controls\BCustomDrawButton.cs" />
+    <None Include="Controls\BDataGrid.cs" />
+    <None Include="Controls\BGDIGraphics.cs" />
+    <None Include="Controls\BGPUGraphics.cs" />
+    <None Include="Controls\BGraphics.cs" />
+    <None Include="Controls\BGroupBox.cs" />
+    <None Include="Controls\BInputField.cs" />
+    <None Include="Controls\BLabel.cs" />
+    <None Include="Controls\BListView.cs" />
+    <None Include="Controls\BPainter.cs" />
+    <None Include="Controls\BPanel.cs" />
+    <None Include="Controls\BProgressBar.cs" />
+    <None Include="Controls\BRgbColorSilder.cs" />
+    <None Include="Controls\BScrollBar.cs" />
+    <None Include="Controls\BSlideBar.cs" />
+    <None Include="Controls\BSplitLine.cs" />
+    <None Include="Controls\BTab.cs" />
+    <None Include="Controls\BTabControl.cs">
+      <SubType>Component</SubType>
+    </None>
+    <None Include="Controls\BToolBar.cs" />
+    <None Include="Controls\BTrackBar.cs" />
+    <None Include="Controls\BTreeView.cs" />
+    <None Include="Controls\BUIElement.cs" />
+    <None Include="Controls\GraphicsExpand.cs" />
+    <None Include="Controls\Grid.cs" />
+    <None Include="Controls\GridItem.cs" />
+    <None Include="Controls\GridLength.cs" />
+    <None Include="Controls\GridType.cs" />
+    <None Include="Controls\IBGraphics.cs" />
+    <None Include="Controls\ISizedItem.cs" />
+    <None Include="Controls\IUIElment.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="runtimes\osx-x64\native\lib\libglfw.3.dylib">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="runtimes\win-x64\native\lib\glfw3.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="runtimes\win-x86\native\lib\glfw3.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\libs\libspirv\libspirv.csproj" />
+    <ProjectReference Include="..\..\libs\libwasm\libwasm.csproj" />
+    <ProjectReference Include="..\Tuyin.IR.Analysis\Tuyin.IR.Analysis.csproj" />
+    <ProjectReference Include="..\Tuyin.IR.Reflection\Tuyin.IR.Reflection.csproj" />
+  </ItemGroup>
+
+</Project>

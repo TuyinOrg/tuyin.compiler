@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "tui.tool": {
+      "commandName": "Project",
+      "commandLineArgs": "button.txt"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+namespace test;
+
+func Main(arg) {
+var b = 0;		
+if(5) {		
+ c = 1;
+}		
+else { c = 3; c = 8; }		
+return c;	
+}

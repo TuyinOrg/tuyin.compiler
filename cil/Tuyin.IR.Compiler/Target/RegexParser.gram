@@ -1,0 +1,84 @@
+﻿%lexer
+
+"|"												^(|)
+"("												^(()
+")"												^())
+"."												^(.)
+":"												^(:)
+";"												^(;)
+"+"												^(+)
+"*"												^(*)
+"?"												^(?)
+"."												^(.)
+"^"												^(^)
+"["												^([)
+"]"												^(])
+".."											^UNTIL	
+[0-9]+											^INGETER
+.									
+{
+	var sb = new StringBuilder();
+	ReadLiteral(rd, sb);
+	rd.SetMatch();
+	rd.EndToken(out tk.strRead, out tk.fileName, out tk.line, out tk.startIndex, out tk.endIndex);
+	tk.strRead = sb.ToString();
+	tk.token = LITERAL;
+	return true;
+}
+"/*"                                   
+{
+	ReadComment(rd);
+	rd.SetMatch();
+	rd.EndToken(out tk.strRead, out tk.fileName, out tk.line, out tk.startIndex, out tk.endIndex);
+	return false;
+}
+\/\/.*											^() 
+(\ |\n|\r|\t)+									^()
+
+%parser 
+%parser.class RegexParser
+%parser.using System
+%parser.using System.Text
+%parser.using LLParserLexerLib
+%parser.using Tuyin.IR.Compiler.Parser.Expressions
+%parser.namespace Tuyin.IR.Compiler.Target
+
+regex<Regex>
+	: or																		^new Regex($1)
+	;
+
+or<SourceExpression>
+	: or '|' next																^($1 | $3).SetSpan(StartIndex, $1, $3)
+	| next																		^$1
+	;
+
+next<SourceExpression>
+	: next empty																^($1 > $2).SetSpan(StartIndex, $1, $2)
+	| empty																		^$1
+	;
+	
+empty<SourceExpression>
+	: many '?'																	^$1.Optional().SetSpan(StartIndex, $1, $2)
+	| many																		^$1
+	;
+
+many<SourceExpression>
+	: many1 '*'																	^$1.Many().SetSpan(StartIndex, $1, $2)
+	| many1																		^$1
+	;
+
+many1<SourceExpression>
+	: literal '+'																^$1.Many1().SetSpan(StartIndex, $1, $2)
+	| literal																	^$1
+	;
+
+literal<SourceExpression>
+	: LITERAL																	^Literal($1).SetSpan(StartIndex, $1)
+	| '[' LITERAL ']'															^CharSet($2).SetSpan(StartIndex, $1, $3)
+	| '[' LITERAL '-' LITERAL ']'												^Range($1, $5).SetSpan(StartIndex, $2, $4)
+	| UNTIL LITERAL																^Until($2).SetSpan(StartIndex, $1, $2)
+	| '[' '^' LITERAL ']'														^Except($3).SetSpan(StartIndex, $1, $4)
+	| '{' or ',' INGETER '}'													^Repeat($2, $4).SetSpan(StartIndex, $1, $5)
+	| '.'																		^RegularExpression.Any().SetSpan(StartIndex, $1)
+	| '(' or ')'																^$2
+	;

@@ -1,0 +1,107 @@
+using System.Collections.Generic;
+using Toe.SPIRV.Spv;
+
+
+namespace Toe.SPIRV.Instructions
+{
+    internal partial class OpCopyMemory: Instruction
+    {
+        public OpCopyMemory()
+        {
+        }
+
+        public override Op OpCode { get { return Op.OpCopyMemory; } }
+        
+        /// <summary>
+        /// Returns true if instruction has IdResult field.
+        /// </summary>
+        public override bool HasResultId => false;
+
+        /// <summary>
+        /// Returns true if instruction has IdResultType field.
+        /// </summary>
+        public override bool HasResultType => false;
+
+        public Spv.IdRef Target { get; set; }
+
+        public Spv.IdRef Source { get; set; }
+
+        public Spv.MemoryAccess MemoryAccess { get; set; }
+
+        public Spv.MemoryAccess MemoryAccess2 { get; set; }
+
+        /// <summary>
+        /// Read complete instruction from the bytecode source.
+        /// </summary>
+        /// <param name="reader">Bytecode source.</param>
+        /// <param name="end">Index of a next word right after this instruction.</param>
+        public override void Parse(WordReader reader, uint end)
+        {
+            ParseOperands(reader, end);
+            PostParse(reader, end);
+        }
+
+        /// <summary>
+        /// Read instruction operands from the bytecode source.
+        /// </summary>
+        /// <param name="reader">Bytecode source.</param>
+        /// <param name="end">Index of a next word right after this instruction.</param>
+        public override void ParseOperands(WordReader reader, uint end)
+        {
+            Target = Spv.IdRef.Parse(reader, end-reader.Position);
+            Source = Spv.IdRef.Parse(reader, end-reader.Position);
+            MemoryAccess = Spv.MemoryAccess.ParseOptional(reader, end-reader.Position);
+            MemoryAccess2 = Spv.MemoryAccess.ParseOptional(reader, end-reader.Position);
+        }
+
+        /// <summary>
+        /// Process parsed instruction if required.
+        /// </summary>
+        /// <param name="reader">Bytecode source.</param>
+        /// <param name="end">Index of a next word right after this instruction.</param>
+        partial void PostParse(WordReader reader, uint end);
+
+        /// <summary>
+        /// Calculate number of words to fit complete instruction bytecode.
+        /// </summary>
+        /// <returns>Number of words in instruction bytecode.</returns>
+        public override uint GetWordCount()
+        {
+            uint wordCount = 0;
+            wordCount += Target.GetWordCount();
+            wordCount += Source.GetWordCount();
+            wordCount += MemoryAccess?.GetWordCount() ?? 0u;
+            wordCount += MemoryAccess2?.GetWordCount() ?? 0u;
+            return wordCount;
+        }
+
+        /// <summary>
+        /// Write instruction into bytecode stream.
+        /// </summary>
+        /// <param name="writer">Bytecode writer.</param>
+        public override void Write(WordWriter writer)
+        {
+            WriteOperands(writer);
+            WriteExtras(writer);
+        }
+
+        /// <summary>
+        /// Write instruction operands into bytecode stream.
+        /// </summary>
+        /// <param name="writer">Bytecode writer.</param>
+        public override void WriteOperands(WordWriter writer)
+        {
+            Target.Write(writer);
+            Source.Write(writer);
+            if (MemoryAccess != null) MemoryAccess.Write(writer);
+            if (MemoryAccess2 != null) MemoryAccess2.Write(writer);
+        }
+
+        partial void WriteExtras(WordWriter writer);
+
+        public override string ToString()
+        {
+            return $"{OpCode} {Target} {Source} {MemoryAccess} {MemoryAccess2}";
+        }
+    }
+}

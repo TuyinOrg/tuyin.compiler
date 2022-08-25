@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Tuyin.Sutdio": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}

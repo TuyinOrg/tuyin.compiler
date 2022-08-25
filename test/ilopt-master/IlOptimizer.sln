@@ -1,0 +1,79 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26823.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{091D8CE6-D5C5-463E-AA7D-F08C9006B031}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		License.md = License.md
+		NuGet.config = NuGet.config
+		ReadMe.md = ReadMe.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Imports", "Imports", "{33771C52-E788-4171-89C5-D4E4E2EF28DF}"
+	ProjectSection(SolutionItems) = preProject
+		Imports\IlOptimizer.Common.props = Imports\IlOptimizer.Common.props
+		Imports\IlOptimizer.Common.targets = Imports\IlOptimizer.Common.targets
+		Imports\IlOptimizer.GenerateInternalsVisibleTo.targets = Imports\IlOptimizer.GenerateInternalsVisibleTo.targets
+		Imports\IlOptimizer.UnitTests.props = Imports\IlOptimizer.UnitTests.props
+		Imports\IlOptimizer.UnitTests.targets = Imports\IlOptimizer.UnitTests.targets
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{F95BADE8-B7A0-4546-BD29-1A7AB3283EBD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{AEDC18B3-58B4-462B-AF09-2EDEACA39B1A}"
+	ProjectSection(SolutionItems) = preProject
+		Imports\Shared\Common\IlOptimizer.snk = Imports\Shared\Common\IlOptimizer.snk
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{953802EF-5489-4730-B895-79F18F0251AC}"
+	ProjectSection(SolutionItems) = preProject
+		Imports\Shared\UnitTests\Program.cs = Imports\Shared\UnitTests\Program.cs
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sources", "Sources", "{2E7ECA0F-4B0F-4F32-A0AC-320B5D3E4756}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IlOptimizer", "IlOptimizer", "{4D8849BC-B8D1-4ED4-BF2F-243869B8E003}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IlOptimizer", "Sources\IlOptimizer\IlOptimizer.csproj", "{93C6BA41-9FB9-48FB-87FA-FBEAD61B8830}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{49C3BC59-AA44-4EC7-A15F-723DE90767C2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IlOptimizer", "IlOptimizer", "{C63CE9BE-C22E-4C1A-89F5-786BE7CF3236}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IlOptimizer.UnitTests", "Tests\IlOptimizer\IlOptimizer.UnitTests.csproj", "{DE4022B2-6F0F-409A-A08B-B1FF579E1329}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{93C6BA41-9FB9-48FB-87FA-FBEAD61B8830}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93C6BA41-9FB9-48FB-87FA-FBEAD61B8830}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93C6BA41-9FB9-48FB-87FA-FBEAD61B8830}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93C6BA41-9FB9-48FB-87FA-FBEAD61B8830}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE4022B2-6F0F-409A-A08B-B1FF579E1329}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE4022B2-6F0F-409A-A08B-B1FF579E1329}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE4022B2-6F0F-409A-A08B-B1FF579E1329}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE4022B2-6F0F-409A-A08B-B1FF579E1329}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F95BADE8-B7A0-4546-BD29-1A7AB3283EBD} = {33771C52-E788-4171-89C5-D4E4E2EF28DF}
+		{AEDC18B3-58B4-462B-AF09-2EDEACA39B1A} = {F95BADE8-B7A0-4546-BD29-1A7AB3283EBD}
+		{953802EF-5489-4730-B895-79F18F0251AC} = {F95BADE8-B7A0-4546-BD29-1A7AB3283EBD}
+		{4D8849BC-B8D1-4ED4-BF2F-243869B8E003} = {2E7ECA0F-4B0F-4F32-A0AC-320B5D3E4756}
+		{93C6BA41-9FB9-48FB-87FA-FBEAD61B8830} = {4D8849BC-B8D1-4ED4-BF2F-243869B8E003}
+		{C63CE9BE-C22E-4C1A-89F5-786BE7CF3236} = {49C3BC59-AA44-4EC7-A15F-723DE90767C2}
+		{DE4022B2-6F0F-409A-A08B-B1FF579E1329} = {C63CE9BE-C22E-4C1A-89F5-786BE7CF3236}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F031F3B5-CEE3-4B5D-BC2C-C3F8D0D3F086}
+	EndGlobalSection
+EndGlobal

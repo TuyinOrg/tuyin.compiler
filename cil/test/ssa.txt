@@ -1,0 +1,13 @@
+namespace test;
+
+func Main(arg) 
+{
+a = 2 + 3;
+if(1) {
+	a = a * 2;
+}
+else {
+	a = 1; 
+}
+b = a;
+}

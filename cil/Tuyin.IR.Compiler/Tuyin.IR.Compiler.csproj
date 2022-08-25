@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<LangVersion>10.0</LangVersion>
+		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<DefineConstants>$(DefineConstants)TRACE;COMPILER</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<DefineConstants>$(DefineConstants)TRACE;COMPILER</DefineConstants>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="Target\Templates\ParserTemplate.txt" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Include="..\..\tool\first_dsl\U\U_Tuple.cs" Link="Target\U_Tuple.cs" />
+	  <Compile Include="..\..\tool\first_dsl\U_Lexer.cs" Link="Target\U_Lexer.cs" />
+	  <Compile Include="..\..\tool\first_dsl\U_LexParserHelper.cs" Link="Target\U_LexParserHelper.cs" />
+	  <Compile Include="..\..\tool\first_dsl\U_LLParserLexerLib.cs" Link="Target\U_LLParserLexerLib.cs" />
+	  <Compile Include="..\..\tool\first_dsl\U_regexp.cs" Link="Target\U_regexp.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="Target\Templates\ParserTemplate.txt" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Tuyin.IR.Analysis\Tuyin.IR.Analysis.csproj" />
+	  <ProjectReference Include="..\Tuyin.IR.Reflection\Tuyin.IR.Reflection.csproj" />
+	</ItemGroup>
+</Project>

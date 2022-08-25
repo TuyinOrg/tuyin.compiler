@@ -1,0 +1,69 @@
+﻿%lexer 
+
+"."										^(.)
+"("										^(()
+")"										^())
+"distinct"								^DISSTINCT	
+(_|[a-z]|[A-Z])(_|[a-z]|[A-Z]|[0-9])*	^ID
+("-"[0-9]+)|([0-9]+)					^INTEGER
+("-"[0-9]+)|([0-9]+).([0-9]+)			^FLOAT
+"'"
+{
+	var sb = new StringBuilder();
+	ReadString(rd, sb);
+	rd.SetMatch();
+	rd.EndToken(out tk.strRead, out tk.fileName, out tk.line, out tk.startIndex, out tk.endIndex);
+	tk.strRead = sb.ToString();
+	tk.token = CHS;
+	return true;
+}
+"/*"                                   
+{
+	ReadComment(rd);
+	rd.SetMatch();
+	rd.EndToken(out tk.strRead, out tk.fileName, out tk.line, out tk.startIndex, out tk.endIndex);
+	return false;
+}
+\/\/.*									^() 
+
+
+%parser
+%parser.class DIMetadataParser
+%parser.using System
+%parser.using System.Text
+%parser.using LLParserLexerLib
+%parser.namespace Tuyin.IR.Reflection.Symbols
+
+metadatas<Metadatas>
+	:									^new Metadatas()
+	| metadatas metadata				^$1.Add($2)
+	;
+
+metadata<DIMetadata>	
+	: header '(' properties ')'			^new DIMetadata($1, $3)
+	;
+
+header<DIHeader>
+	: ID								^new DIHeader(new DIToken($1.strRead, $1.StartIndex, $1.EndIndex - $1.StartIndex)))
+	| modifiter header					^$2.SetModifiter($1)
+	;
+
+modifiter<DIModifiter>
+	: DISSTINCT							^DIModifiter.Disstinct
+	;
+
+properties<DIProperties>
+	:									^new DIProperties()
+	| property							^new DIProperties($1)
+	| properties ',' property			^$1.Add($3)
+	;
+
+property<DIProperty>
+	: ID ':' value						^new DIProperty(new DIToken($1.strRead, $1.StartIndex, $1.EndIndex - $1.StartIndex)), $3)
+	;
+
+value<DIExpression>
+	: CHS								^new DIExpression<string>($1.strRead, new DIToken($1.strRead, $1.StartIndex, $1.EndIndex - $1.StartIndex))
+	| INTEGER							^new DIExpression<int>(int.Parse($1.strRead), new DIToken($1.strRead, $1.StartIndex, $1.EndIndex - $1.StartIndex))
+	| FLOAT								^new DIExpression<float>(float.Parse($1.strRead), new DIToken($1.strRead, $1.StartIndex, $1.EndIndex - $1.StartIndex))
+	;

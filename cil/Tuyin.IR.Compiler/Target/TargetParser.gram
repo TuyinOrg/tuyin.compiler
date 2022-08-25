@@ -1,0 +1,402 @@
+﻿%lexer
+
+bool									^BOOL
+byte									^BYTE															
+sbyte									^SBYTE													
+short									^SHORT													
+ushort									^USHORT													
+int										^INT														
+uint									^UINT													
+long									^LONG															
+ulong									^ULONG															
+float									^FLOAT												
+double									^DOUBLE															
+char									^CHAR															
+string									^STRING												
+namespace								^NAMESPACE
+match									^MATCH
+struct									^STRUCT
+func									^FUNC
+import									^IMPORT
+public									^PUBLIC
+private									^PRIVATE
+protected								^PROTECTED
+extern									^EXTERN
+switch									^SWITCH
+case									^CASE
+while									^WHILE
+break									^BREAK
+continue								^CONTINUE
+return									^RETURN
+default									^DEFAULT
+//as										^AS
+true									^TRUE
+false									^FALSE
+var										^VAR
+new										^NEW
+if										^IF
+else									^ELSE
+"=>"									^ARROW
+"&&"									^ANDAND
+"||"									^OROR
+"++"									^INC
+"--"									^DEC
+"^"										^(^)
+"|"										^(|)
+"+"										^(+)
+"-"										^(-)
+"="										^(=)
+"*"										^(*)
+"/"										^(/)
+"%"										^(%)
+";"										^(;)
+"("										^(()
+")"										^())
+"{"										^({)
+"}"										^(})
+"["										^([)
+"]"										^(])
+","										^(,)
+"."										^(.)
+":"										^(:)
+">"										^GT
+">="									^GE
+"<"		    							^LT
+"<="	    							^LE
+"=="	    							^EQ
+"!="	    							^NE
+">>"									^SHR
+"<<"									^SHL
+(_|[a-z]|[A-Z])(_|[a-z]|[A-Z]|[0-9])*	^ID
+("-"[0-9]+)|([0-9]+)					^INTEGER
+("-"[0-9]+)|([0-9]+).([0-9]+)			^FLOAT
+(\\\u|0x)([0-9]|[a-f]|[A-F])+			^UNICODE
+"$"
+{
+	var sb = new StringBuilder();
+	ReadRegex(rd, sb);
+	rd.SetMatch();
+	rd.EndToken(out tk.strRead, out tk.fileName, out tk.line, out tk.startIndex, out tk.endIndex);
+	tk.strRead = sb.ToString();
+	tk.token = REGEX;
+	return true;
+}
+"'"
+{
+	var sb = new StringBuilder();
+	ReadString(rd, sb);
+	rd.SetMatch();
+	rd.EndToken(out tk.strRead, out tk.fileName, out tk.line, out tk.startIndex, out tk.endIndex);
+	tk.strRead = sb.ToString();
+	tk.token = CHS;
+	return true;
+}
+"/*"                                   
+{
+	ReadComment(rd);
+	rd.SetMatch();
+	rd.EndToken(out tk.strRead, out tk.fileName, out tk.line, out tk.startIndex, out tk.endIndex);
+	return false;
+}
+\/\/.*									^() 
+(\ |\n|\r|\t)+							^()
+
+%parser 
+%parser.class TargetParser
+%parser.using System
+%parser.using System.Text
+%parser.using LLParserLexerLib
+%parser.using Tuyin.IR.Reflection
+%parser.using Tuyin.IR.Reflection.Types
+%parser.using Tuyin.IR.Compiler.Parser.Productions
+%parser.using Tuyin.IR.Compiler.Target.Translates
+%parser.namespace Tuyin.IR.Compiler.Target
+
+// target
+target<Target>
+	: import_list NAMESPACE path ';' decl_list									^new Target(FileName, TargetLanguage, Lexicon, $3, $1, $5)
+	;
+
+import_list<ImportList>
+	:																			^new ImportList()
+	| imports																	^$1
+	;
+
+imports<ImportList>
+	: import																	^new ImportList($1)
+	| imports import															^$1.Add($2)
+	;
+
+import<Import>
+	: IMPORT path ';' 															^new Import(GetSpan($1, $3), $2)
+	;
+
+decl_list<DeclareList>
+	: 																			^new DeclareList()
+	| decl_list modifiter decl													^$1.Add($3.SetModifiter($2))
+	;
+
+decl<Declare>
+	: func_decl																	^$1
+	| strcut_decl																^$1
+	| match_decl																^$1
+	;
+
+// parser
+match_decl<MatchDecl>
+	: MATCH ID '=' or ';'														^new MatchDecl(GetSpan($1, $5), $2, $4)
+	;
+
+or<SourceProduction>
+	: or '|' mapping															^new OrProduction($1, $3).SetSpan($1, $3)
+	| mapping																	^$1
+	;
+
+mapping<SourceProduction>														
+	: next ARROW stmt															^new MappingProduction($1, Translater.Convert($3, TargetLanguage)).SetSpan($1, $3)
+	| next																		^$1
+	;
+
+next<SourceProduction>
+	: next empty																^new ConcatenationProduction($1, $2).SetSpan($1, $2)
+	| empty																		^$1
+	;
+
+empty<SourceProduction>
+	: many '?'																	^new OrProduction($1, new EmptyProduction().SetSpan($2)).SetSpan($1, $2)
+	;
+
+many<SourceProduction>
+	: many1 '*'																	^new RepeatProduction($1, null).SetSpan($1, $2)
+	| many1																		^$1
+	;
+
+many1<SourceProduction>
+	: prim '+'																	^new ConcatenationProduction($1, new RepeatProduction($1, null).SetSpan($1, $2)).SetSpan($1, $2)
+	| prim																		^$1
+	;
+
+prim<SourceProduction>
+	: CHS																		^new Terminal(GetLiterallToken($1)).SetSpan($1)
+	| REGEX																		^new Terminal(GetRegexToken($1)).SetSpan($1)
+	| ID '(' or ')' 															^new DefineFragment(GetSpan($1, $4), $3, $1)
+	| ID																		^new ReferenceMatch($1).SetSpan($1)
+	| '(' or ')'																^$2
+	;
+
+// struct
+strcut_decl<StructDecl>
+	: STRUCT typedName '{' struct_member_list '}'								^new StructDecl(GetSpan($2), $2, $4)
+	;
+	
+struct_member_list<StructDeclMemberList>
+	:																			^new StructDeclMemberList()
+	| struct_member_list struct_member											^$1.Add($2)
+	;
+
+struct_member<StructDeclMember>
+	: modifiter typedName ';'													^new StructDeclMember(GetSpan($1, $3), $1, $2)
+	;
+
+// function
+func_decl<FuncDecl>
+	: FUNC typedName '(' argse ')' stmt											^new FuncDecl(GetSpan($2), $2, $4, $6)
+	;
+
+argse<Args>
+	:																			^new Args()
+	| args																		^$1
+	;
+
+args<Args>
+	: typedName																	^new Args($1)
+	| args ',' typedName														^$1.Add($3)
+	;
+
+stmt<StmtRoot>	
+	: e	';'																		^new StmtExpression(GetSpan($1, $2), $1)
+	| BREAK ';'																	^new StmtBreak(GetSpan($1, $2))
+	| CONTINUE ';'																^new StmtContinue(GetSpan($1, $2))
+	| RETURN e ';'																^new StmtReturn(GetSpan($1, $3), $2)
+	| VAR ID '=' e ';'															^new StmtVarDecl(GetSpan($1, $5), $2, $4)
+	| WHILE '(' e ')' stmt 														^new StmtWhile(GetSpan($1, $5), $3, $5)
+	| SWITCH '(' e ')' '{' caselist '}'											^new StmtSwitch(GetSpan($1, $7), $3, $6)
+	| ifstmt																	^$1
+	| '{' stmtlist '}'															^new StmtBlock(GetSpan($1, $3), $2)
+	;
+
+ifstmt<StmtRoot>
+	: IF '(' e ')' stmt															^new StmtIf(GetSpan($1, $5), $3, $5)
+	| IF '(' e ')' stmt *ELSE stmt												^new StmtIf(GetSpan($1, $7), $3, $5, $7)
+	;
+
+casestmt<StmtCase>
+	: CASE e ':' stmtlist														^new StmtCase(GetSpan($1, $4), $2, $4)
+	| DEFAULT ':' stmtlist														^new StmtDefaultCase(GetSpan($1, $3), $3)
+	;
+
+caselist<CasesBlock>
+	: casestmt																	^new CasesBlock($1)
+	| caselist casestmt															^$1.Add($2)
+	;
+
+stmtlist<StmtList>
+	: stmt																		^new StmtList($1)
+	| stmtlist stmt																^$1.Add($2)
+	;
+	
+e<ExprRoot>	
+	: e_assignment																^$1
+	;
+
+e_assignment<ExprRoot>
+	: e_assignment '=' e_cond													^new ExprAssignment(GetSpan($1, $3), $1, $3)
+	| e_cond																	^$1
+	;
+
+e_cond<ExprRoot>
+	: e_cond '?' e_oror ':' e_oror												^new ExprConditional(GetSpan($1, $5), $1, $3, $5)
+	| e_oror																	^$1
+	;
+
+e_oror<ExprRoot>
+	: e_oror OROR e_andand														^new ExprOrOr(GetSpan($1, $3), $1, $3)
+	| e_andand																	^$1
+	;
+
+e_andand<ExprRoot>
+	: e_andand ANDAND e_or														^new ExprAndAnd(GetSpan($1, $3), $1, $3)
+	| e_or																		^$1
+	;
+
+e_or<ExprRoot>
+	: e_or '|' e_xor															^new ExprOr(GetSpan($1, $3), $1, $3)
+	| e_xor																		^$1
+	;
+
+e_xor<ExprRoot>
+	: e_xor '^' e_and															^new ExprXor(GetSpan($1, $3), $1, $3)
+	| e_and																		^$1
+	;
+
+e_and<ExprRoot>
+	: e_and '&' e_eq															^new ExprAnd(GetSpan($1, $3), $1, $3)
+	| e_eq																		^$1
+	;
+
+e_eq<ExprRoot>
+	: e_eq EQ e_cmp																^new ExprEqual(GetSpan($1, $3), $1, $3)
+	| e_eq NE e_cmp																^new ExprNotEqual(GetSpan($1, $3), $1, $3)
+	| e_cmp																		^$1
+	;
+
+e_cmp<ExprRoot>
+	: e_cmp LT e_shift															^new ExprLessThen(GetSpan($1, $3), $1, $3)
+	| e_cmp LE e_shift															^new ExprLessEqual(GetSpan($1, $3), $1, $3)
+	| e_cmp GT e_shift															^new ExprGreaterThen(GetSpan($1, $3), $1, $3)
+	| e_cmp GE e_shift															^new ExprGreaterEqual(GetSpan($1, $3), $1, $3)
+	| e_shift																	^$1
+	;
+
+e_shift<ExprRoot>
+	: e_shift SHL e_add															^new ExprLeftShift(GetSpan($1, $3), $1, $3)
+	| e_shift SHR e_add															^new ExprRightShift(GetSpan($1, $3), $1, $3)
+	| e_add																		^$1
+	;
+
+e_add<ExprRoot>
+	: e_add '+' e_mul															^new ExprAdd(GetSpan($1, $3), $1, $3)
+	| e_add '-' e_mul															^new ExprSub(GetSpan($1, $3), $1, $3)
+	| e_mul																		^$1
+	;
+
+e_mul<ExprRoot>
+	: e_una																		^$1
+	| e_mul '*' e_una															^new ExprMul(GetSpan($1, $3), $1, $3)
+	| e_mul '/' e_una															^new ExprDiv(GetSpan($1, $3), $1, $3)
+	| e_mul '%' e_una															^new ExprRem(GetSpan($1, $3), $1, $3)
+	;
+
+e_una<ExprRoot>
+	: e_prim																	^$1
+	| '-' e_una																	^new ExprNeg(GetSpan($1, $2), $2)
+	| '+' e_una																	^new ExprPlus(GetSpan($1, $2), $2)
+	| INC e_una																	^new ExprPreInc(GetSpan($1, $2), $2)
+	| DEC e_una																	^new ExprPreDec(GetSpan($1, $2), $2)
+	;
+
+e_num<ExprNum>
+	: INTEGER																	^new ExprInteger(GetSpan($1), $1)
+	| FLOAT																		^new ExprFloat(GetSpan($1), $1)
+	| UNICODE																	^new ExprUnicode(GetSpan($1), $1)
+	;
+
+e_prim<ExprRoot>
+	: e_num																		^$1
+	| TRUE																		^new ExprTrue(GetSpan($1))
+	| FALSE																		^new ExprFalse(GetSpan($1))
+	| CHS																		^new ExprString(GetSpan($1), $1)
+	| ID																		^new ExprIdentifier(GetSpan($1), $1)
+	| e_prim '.' ID																^new ExprMember(GetSpan($1, $3), $1, $3)
+	| e_prim '(' eliste ')'														^new ExprCall(GetSpan($1, $4), $1, $3)
+	| e_prim '[' elist ']'														^new ExprIndex(GetSpan($1, $4), $1, $3)
+	| e_prim INC																^new ExprPostInc(GetSpan($1, $2), $1)
+	| e_prim DEC																^new ExprPostDec(GetSpan($1, $2), $1)
+	| '[' elist ']'																^new ExprArray(GetSpan($1, $3), $2)
+	| NEW '{' elist_named '}'													^new ExprLiteral(GetSpan($1, $4), $3)
+	| '(' e ')'																	^$2
+	;
+
+eliste<ExprList>
+	:																			^new ExprList()
+	| elist																		^$1
+	;
+
+elist<ExprList>
+	: e																			^new ExprList($1)
+	| elist ',' e																^$1.Add($3)
+	;
+
+elist_named<ExprNamedList>														
+	: ID '=' e																	^new ExprNamedList(new ExprNamed($1, $3))
+	| elist_named ',' ID '=' e													^$1.Add(new ExprNamed($3, $5))
+	;
+
+// type
+typedName<TypeNamed>
+	: ID																		^new TypeNamed($1, new AutoType().SetSpan())
+	| ID ':' type																^new TypeNamed($1, $3)
+	;
+
+type<SourceType>
+	: BOOL																		^new IntegerType(1, false).SetSpan($1)
+	| BYTE																		^new IntegerType(8, false).SetSpan($1)
+	| SBYTE																		^new IntegerType(8, true).SetSpan($1)
+	| SHORT																		^new IntegerType(16, true).SetSpan($1)
+	| USHORT																	^new IntegerType(16, false).SetSpan($1)
+	| INT																		^new IntegerType(32, true).SetSpan($1)
+	| UINT																		^new IntegerType(32, false).SetSpan($1)
+	| LONG																		^new IntegerType(64, true).SetSpan($1)
+	| ULONG																		^new IntegerType(64, false).SetSpan($1)
+	| FLOAT																		^new FloatType(28, 6).SetSpan($1)
+	| DOUBLE																	^new FloatType(49, 15).SetSpan($1)
+	| CHAR																		^new IntegerType(8, true).SetSpan($1)
+	| STRING																	^new MutableType("string").SetSpan($1)
+	| ID																		^new IdentifierType($1).SetSpan($1)
+	| type '[' ']'																^new ArrayType($1).SetSpan($1, $3)
+	| type '*'																	^new PointerType($1).SetSpan($1, $2)
+	;
+
+// other
+modifiter<SourceModifiter>																
+	:																			^new SourceModifiter(null, Modifiter.Private)
+	| PUBLIC																	^new SourceModifiter($1, Modifiter.Public)
+	| PRIVATE																	^new SourceModifiter($1, Modifiter.Private)
+	| PROTECTED																	^new SourceModifiter($1, Modifiter.Protected)
+	| EXTERN																	^new SourceModifiter($1, Modifiter.Extern)
+	;
+
+path<Path>
+	: ID																		^new Path($1)
+	| path '.' ID																^$1.Add($3)
+	;

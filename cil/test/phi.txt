@@ -1,0 +1,15 @@
+namespace test;
+
+func Main(arg) 
+{
+a = 0;
+if(2) {
+ a= 3;
+ if(4)
+  a = 5;
+ else if(6)
+  a = 7;
+}
+
+return a;
+}

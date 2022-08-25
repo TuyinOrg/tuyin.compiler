@@ -1,0 +1,4 @@
+digraph
+{
+    "label 1" [ label = "{ label\ 1 | %0=ldc\ 1\nx.1.0=%0\n%1=ldc\ 5\na.1.0=%1\ny.1.0=x.1.0\n%2=ldc\ 2\n%3=add\ a.1.0,%2\nb.1.0=%3\n%4=add\ y.1.0,b.1.0\nz.1.0=%4\nret\ z.1.0 }", shape = record, style = rounded ]
+}

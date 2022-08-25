@@ -1,0 +1,6 @@
+func Main(arg) 
+{
+	if(true) {
+		var a  = 1;
+	}
+}

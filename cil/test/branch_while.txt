@@ -1,0 +1,11 @@
+namespace test;
+
+func Main(arg) 
+{
+	while(true) 
+	{		
+		var a = 1;		
+		var b = 1;		
+	}
+				
+}

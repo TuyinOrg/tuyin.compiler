@@ -1,0 +1,3 @@
+﻿namespace Toe.SPIRV.Spv
+{
+}

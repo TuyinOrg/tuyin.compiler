@@ -1,0 +1,9 @@
+func Main(arg) 
+{
+	while(true) {
+		var a  = 1;
+		break;
+	}
+
+	var b = 2;
+}

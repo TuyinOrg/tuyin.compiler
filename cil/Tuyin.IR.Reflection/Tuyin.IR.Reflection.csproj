@@ -1,0 +1,60 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+	<LangVersion>10.0</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Symbols\old\DIBasicType.cs" />
+    <Compile Remove="Symbols\old\DIBlock.cs" />
+    <Compile Remove="Symbols\old\DIChecksumKind.cs" />
+    <Compile Remove="Symbols\old\DICompileUnit.cs" />
+    <Compile Remove="Symbols\old\DICustomNode.cs" />
+    <Compile Remove="Symbols\old\DIExpressionOP.cs" />
+    <Compile Remove="Symbols\old\DILexicalBlock.cs" />
+    <Compile Remove="Symbols\old\DILocalVariable.cs" />
+    <Compile Remove="Symbols\old\DILocation.cs" />
+    <Compile Remove="Symbols\old\DIMetadataScope.cs" />
+    <Compile Remove="Symbols\old\DINamespace.cs" />
+    <Compile Remove="Symbols\old\DISubprogram.cs" />
+    <Compile Remove="Symbols\old\DISubroutineType.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="IO\DIMetadataParser.gram" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\libs\libfsm\TwoKeyDictionary.cs" Link="TwoKeyDictionary.cs" />
+    <Compile Include="..\..\tool\first_dsl\U\U_Tuple.cs" Link="Symbols\U_Tuple.cs" />
+    <Compile Include="..\..\tool\first_dsl\U_Lexer.cs" Link="Symbols\U_Lexer.cs" />
+    <Compile Include="..\..\tool\first_dsl\U_LexParserHelper.cs" Link="Symbols\U_LexParserHelper.cs" />
+    <Compile Include="..\..\tool\first_dsl\U_LLParserLexerLib.cs" Link="Symbols\U_LLParserLexerLib.cs" />
+    <Compile Include="..\..\tool\first_dsl\U_regexp.cs" Link="Symbols\U_regexp.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Symbols\old\DICompileUnit.cs" />
+    <None Include="Symbols\old\DICustomNode.cs" />
+    <None Include="Symbols\old\DIExpressionOP.cs" />
+    <None Include="Symbols\old\DILexicalBlock.cs" />
+    <None Include="Symbols\old\DILocalVariable.cs" />
+    <None Include="Symbols\old\DILocation.cs" />
+    <None Include="Symbols\old\DIMetadataScope.cs" />
+    <None Include="Symbols\old\DINamespace.cs" />
+    <None Include="Symbols\old\DISubprogram.cs" />
+    <None Include="Symbols\old\DISubroutineType.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.2.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\libs\libfsm\libfsm.csproj" />
+  </ItemGroup>
+
+</Project>

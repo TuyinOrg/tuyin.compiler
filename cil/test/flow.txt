@@ -1,0 +1,15 @@
+namespace test;
+
+func Main(arg) 
+{
+	var a = 1;
+	var b = 2;
+	var c = 3;
+	var e = 0;
+	if(b > 2)
+	  e = a + b;
+	else
+	  e = c * a;
+
+	return e;			
+}

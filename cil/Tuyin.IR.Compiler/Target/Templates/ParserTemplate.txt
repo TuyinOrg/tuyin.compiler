@@ -1,0 +1,25 @@
+﻿func read(source, index, length) 
+{
+	switch(length) 
+	{
+{SIMD_READER}
+	}
+}
+
+public func parse(args) 
+{
+	var shift = [{PARSER_TABLE}];
+	var simd = [{PARSER_SIMD}];
+	var state = 1;
+	var index = 0;
+	while(true) 
+	{
+		state = table[read(source, index, simd[state]), state];
+		switch(state) 
+		{
+{STATE_ACTIONS}
+		}
+	
+		if(state == 0) return;
+	}
+}
