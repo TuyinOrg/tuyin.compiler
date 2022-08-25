@@ -21,12 +21,6 @@ namespace Tuyin.IR.Reflection.IO
             //mManager = new DIMetadataManager(new DbgHeader())
         }
 
-        internal DIMetadataManager ReadDebugHeader() 
-        {
-            //DbgHeader dbg = new DbgHeader(DICompileUnit)
-            return null;
-        }
-
         internal override Function ReadFunction()
         {
             return new Function(
@@ -38,26 +32,32 @@ namespace Tuyin.IR.Reflection.IO
                 null);
         }
 
-        private Scope ReadScope() 
-        {
-            var id = mStringTables[mReader.ReadInt32()];
-            return null;
-        }
-
         internal override Import ReadImport()
         {
+            if (mReader.BaseStream.Position >= mReader.BaseStream.Length - 4)
+                return null;
+
+            var index = mReader.ReadInt32();
+            if (index >= mStringTables.Length || mStringTables[index] != "import") 
+            {
+                mReader.BaseStream.Position -= 4;
+                return null;
+            }
+
             var length = mReader.ReadInt32();
             var strs = new Instructions.String[length];
             for (var i = 0; i < length; i++)
-            {
-                var str = mStringTables[mReader.ReadInt32()];
-                strs[i] = new Instructions.String(str, new SourceSpan(mReader.ReadInt32(), mReader.ReadInt32()));
-            }
+                strs[i] = new Instructions.String(
+                    mStringTables[mReader.ReadInt32()], 
+                    new SourceSpan(mReader.ReadInt32(), mReader.ReadInt32()));
 
             return new Import(
                 strs, 
-                new Instructions.Identifier(mStringTables[mReader.ReadInt32()])
-                { SourceSpan = new SourceSpan(mReader.ReadInt32(), mReader.ReadInt32()) });
+                new Instructions.Identifier(
+                    mStringTables[mReader.ReadInt32()]) 
+                { 
+                    SourceSpan = new SourceSpan(mReader.ReadInt32(), mReader.ReadInt32()) 
+                });
         }
 
         internal override DIMetadata ReadMetadata()
@@ -71,17 +71,16 @@ namespace Tuyin.IR.Reflection.IO
             var length = mReader.ReadInt32();
             var strs = new Instructions.String[length];
             for (var i = 0; i < length; i++)
-            {
-                var str = mStringTables[mReader.ReadInt32()];
-                strs[i] = new Instructions.String(str, new SourceSpan(mReader.ReadInt32(), mReader.ReadInt32()));
-            }
+                strs[i] = new Instructions.String(
+                    mStringTables[mReader.ReadInt32()], 
+                    new SourceSpan(mReader.ReadInt32(), mReader.ReadInt32()));
 
             return strs;
         }
 
         internal override ISignature ReadSignature()
         {
-            throw new NotImplementedException();
+            return new ModuleSignature(mStringTables[mReader.ReadInt32()]);
         }
     }
 }

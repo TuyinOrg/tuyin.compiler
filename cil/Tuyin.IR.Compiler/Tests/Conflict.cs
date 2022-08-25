@@ -17,7 +17,7 @@ namespace Tuyin.IR.Compiler.Tests
             P.Rule = //((START & MIDDLE) | (START & MIDDLE & START)) & START;
                      //(START & START) | START;
                     ((START & MIDDLE & END) | (START) | (START & END)) & OTHER;
-
+             
             return P;
         }
 

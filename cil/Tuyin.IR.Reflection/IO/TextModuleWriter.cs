@@ -10,6 +10,11 @@ namespace Tuyin.IR.Reflection.IO
         {
         }
 
+        internal override void Flush()
+        {
+            throw new System.NotImplementedException();
+        }
+
         internal override void WriteFunction(Function function)
         {
         }

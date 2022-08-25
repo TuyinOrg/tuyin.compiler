@@ -107,6 +107,7 @@ namespace Tuyin.IR.Reflection
 
             writer.WriteNamespace(Namespace);
             writer.WriteSignature(Signature);
+
             for (var i = 0; i < Imports.Count; i++)
                 writer.WriteImport(Imports[i].Path, Imports[i].Identifier);
 
@@ -116,6 +117,7 @@ namespace Tuyin.IR.Reflection
             for (var i = 0; i < Metadatas.Count; i++)
                 writer.WriteMetadata(Metadatas[i]);
 
+            writer.Flush();
             stream.Flush();
             stream.Close();
         }

@@ -23,5 +23,6 @@ namespace Tuyin.IR.Reflection.IO
         internal abstract void WriteImport(String[] path, Identifier identifier);
         internal abstract void WriteFunction(Function function);
         internal abstract void WriteMetadata(DIMetadata dIMetadata);
+        internal abstract void Flush();
     }
 }
