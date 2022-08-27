@@ -31,7 +31,7 @@ namespace Tuyin.IR.Analysis.IO
             mBinaryWriter.BaseStream.Close();
         }
 
-        internal override void WriteFunction(Function func, DAG dAG)
+        internal override void WriteFunction(Function func, DAG dag)
         {
             mBinaryWriter.Write((byte)func.Linkage);
             mBinaryWriter.Write((byte)func.Visibility);
@@ -46,7 +46,7 @@ namespace Tuyin.IR.Analysis.IO
                 mBinaryWriter.Write(p.SourceSpan.EndIndex);
             }
 
-            var codes = GenerateMicrocodes(func);
+            var codes = GenerateMicrocodes(dag);
             mBinaryWriter.Write(codes.Length);
             foreach (var code in codes) 
             {
@@ -101,9 +101,23 @@ namespace Tuyin.IR.Analysis.IO
         /// <summary>
         /// 生产微码
         /// </summary>
-        private IReadOnlyArray<Microcode> GenerateMicrocodes(Function func)
+        private IReadOnlyArray<Microcode> GenerateMicrocodes(DAG dag)
         {
-            return null;
+            DynamicArray<Microcode> codes = new DynamicArray<Microcode>(dag.Vertices.Count);
+            Stack<AnalysisNode> nodes = new Stack<AnalysisNode>();
+            nodes.Push(dag.Entry);
+
+            while (nodes.Count > 0) 
+            {
+                var node = nodes.Pop();
+                if (node is DAGMicrocodeNode code)
+                    codes.Add(code.Microcode);
+
+                foreach (var right in node.Rights)
+                    nodes.Push(right.Target);
+            }
+
+            return codes;
         }
 
         internal override void WriteImport(String[] path, Identifier id)

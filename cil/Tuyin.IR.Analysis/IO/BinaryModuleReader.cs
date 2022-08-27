@@ -36,8 +36,7 @@ namespace Tuyin.IR.Analysis.IO
             var args = new Parameter[pc];
             for (var i = 0; i < pc; i++)
             {
-               var id = new Identifier(
-                    mStringTables[mReader.ReadInt32()])
+               var id = new Identifier(mStringTables[mReader.ReadInt32()])
                {
                    SourceSpan = new SourceSpan(mReader.ReadInt32(), mReader.ReadInt32())
                };
