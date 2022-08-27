@@ -8,18 +8,22 @@ namespace Tuyin.IR.Analysis
     /// </summary>
     public sealed class ComputeUnit : AnalysisNode
     {
-        internal ComputeUnit(ushort index, Function func, CFG cfg, DAG dag, Vector vet)
+        internal ComputeUnit(ushort index, Function func, Branch bra, CFG cfg, DAG dag, PATH pat, Vector vet)
             : base(index)
         {
             Function = func;
+            Branch = bra;
             CFG = cfg;
             DAG = dag;
+            Path = pat;
             Vector = vet;
         }
 
         public Function Function { get; }
+        public Branch Branch { get; }
         public CFG CFG { get; }
         public DAG DAG { get; }
+        public PATH Path { get; }
         public Vector Vector { get; }
     }
 }

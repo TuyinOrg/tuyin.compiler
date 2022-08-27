@@ -81,8 +81,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "libtui", "libs\libtui\libtu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "tui.tool", "tool\tui.tool\tui.tool.csproj", "{E25F9C46-9428-4C0F-9DE7-B7132551170D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "libcom", "libs\libcom\libcom.csproj", "{4F982B23-1125-4868-87BF-EFB51E10193A}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -285,18 +283,6 @@ Global
 		{E25F9C46-9428-4C0F-9DE7-B7132551170D}.Release|x64.Build.0 = Release|Any CPU
 		{E25F9C46-9428-4C0F-9DE7-B7132551170D}.Release|x86.ActiveCfg = Release|Any CPU
 		{E25F9C46-9428-4C0F-9DE7-B7132551170D}.Release|x86.Build.0 = Release|Any CPU
-		{4F982B23-1125-4868-87BF-EFB51E10193A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4F982B23-1125-4868-87BF-EFB51E10193A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4F982B23-1125-4868-87BF-EFB51E10193A}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{4F982B23-1125-4868-87BF-EFB51E10193A}.Debug|x64.Build.0 = Debug|Any CPU
-		{4F982B23-1125-4868-87BF-EFB51E10193A}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{4F982B23-1125-4868-87BF-EFB51E10193A}.Debug|x86.Build.0 = Debug|Any CPU
-		{4F982B23-1125-4868-87BF-EFB51E10193A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4F982B23-1125-4868-87BF-EFB51E10193A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4F982B23-1125-4868-87BF-EFB51E10193A}.Release|x64.ActiveCfg = Release|Any CPU
-		{4F982B23-1125-4868-87BF-EFB51E10193A}.Release|x64.Build.0 = Release|Any CPU
-		{4F982B23-1125-4868-87BF-EFB51E10193A}.Release|x86.ActiveCfg = Release|Any CPU
-		{4F982B23-1125-4868-87BF-EFB51E10193A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -329,7 +315,6 @@ Global
 		{762361B5-1B70-43CB-AC97-5760672C4F6D} = {68AF3051-D1FC-4CB9-99A1-0F63101B950E}
 		{E0B2272F-E698-40E8-9594-70A4425F73A8} = {1CBD2016-496B-416C-B133-FB93F4AFF560}
 		{E25F9C46-9428-4C0F-9DE7-B7132551170D} = {E710FFB6-BC9A-4B2F-8D89-B5360E5F85CA}
-		{4F982B23-1125-4868-87BF-EFB51E10193A} = {68AF3051-D1FC-4CB9-99A1-0F63101B950E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C4E619AB-1E42-45FE-B117-852B872E7834}

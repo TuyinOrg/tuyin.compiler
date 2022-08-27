@@ -55,6 +55,19 @@ namespace Tuyin.IR.Analysis.Data
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static FlowType GetFlowType(this OpCode op) 
+        {
+            return op switch
+            {
+                OpCode.Test => FlowType.Branch,
+                OpCode.Call => FlowType.Call,
+                OpCode.Ret => FlowType.Return,
+
+                _ => FlowType.Next
+            };
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int GetPopSize(this OpCode op) 
         {
             throw new NotImplementedException();

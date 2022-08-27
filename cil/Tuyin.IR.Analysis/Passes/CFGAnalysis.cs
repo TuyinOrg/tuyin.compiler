@@ -30,8 +30,8 @@ namespace Tuyin.IR.Analysis.Passes
             for (var i = 0; i < scopes.Count; i++)
             {
                 var scope = scopes[i];
-                if (scope.Case0 != -1) edges.Add(Edge(nodes[i], nodes[nexts[scope.Case0]]));
-                if (scope.Case1 != -1) edges.Add(Edge(nodes[i], nodes[nexts[scope.Case1]]));
+                if (scope.Case0 != -1 && scope.Case1 < nexts.Length) edges.Add(Edge(nodes[i], nodes[nexts[scope.Case0]]));
+                if (scope.Case1 != -1 && scope.Case1 < nexts.Length) edges.Add(Edge(nodes[i], nodes[nexts[scope.Case1]]));
             }
 
             return new CFG(edges, nodes, input.Statments, metadatas);

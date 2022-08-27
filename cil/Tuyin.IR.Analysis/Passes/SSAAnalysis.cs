@@ -534,11 +534,6 @@ namespace Tuyin.IR.Analysis.Passes
 
     class SSAAnalysisOpation 
     {
-        public SSAAnalysisOpation(IReadOnlyList<Statment> input)
-            : this(new BranchAnalysis().Run(input), input) 
-        {
-        }
-
         public SSAAnalysisOpation(Branch branch, IReadOnlyList<Statment> input)
         {
             Branch = branch;

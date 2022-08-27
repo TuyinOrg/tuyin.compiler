@@ -116,12 +116,14 @@ namespace Tuyin.IR.Analysis
             {
                 var func = module.Functions[i];
                 var stmts = func.Statments;
-                var ssa = new SSAAnalysis().Run(new SSAAnalysisOpation(stmts));
+                var bra = new BranchAnalysis().Run(stmts);
+                var ssa = new SSAAnalysis().Run(new SSAAnalysisOpation(bra, stmts));
                 var cfg = new CFGAnalysis().Run(new CFGAnalysisOpation(ssa));
                 var dag = new DAGAnalysis().Run(new DAGAnalysisOpation(cfg));
+                var pat = new PATHAnalysis().Run(new PathAnalysisOpation(new BranchAnalysis().Run(ssa), dag));
                 var vet = new VectorAnalysis().Run(new VectorAnalysisOpation(dag, cfg));
 
-                mComputeUnits.Add(new ComputeUnit((ushort)i, func, cfg, dag, vet));
+                mComputeUnits.Add(new ComputeUnit((ushort)i, func, bra, cfg, dag, pat, vet));
             }
 
             var dir = Path.GetDirectoryName(module.Signature.Content);

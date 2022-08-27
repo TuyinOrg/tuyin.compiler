@@ -85,14 +85,7 @@ if (output)
 }
 else 
 {
-    var old = Process.GetProcesses().FirstOrDefault(x => x.ProcessName.Contains("BigBuns.Graph.Viewer"));
-    if (old != null) 
-    {
-        old.Kill();
-        old.WaitForExit();
-    }
-
-    var file = @"E:\bigbuns\cil\test\member.txt";
+    var file = @"E:\bigbuns\cil\test\invaild.txt";
     var name = $"{Path.GetDirectoryName(file)}\\{Path.GetFileNameWithoutExtension(file)}";
     var module = Target.Parse(file);
     var env = Tuyin.IR.Analysis.Environment.Create(module.ToIR());

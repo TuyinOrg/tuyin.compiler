@@ -21,8 +21,6 @@ namespace Tuyin.IR.Analysis.IO
             for (var i = 0; i < count; i++)
                 mStringTables[i] = mReader.ReadString();
 
-
-
             //mManager = new DIMetadataManager(new DbgHeader())
         }
 

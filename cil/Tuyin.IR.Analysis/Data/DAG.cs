@@ -243,12 +243,18 @@ namespace Tuyin.IR.Analysis.Data
 
     public abstract class DAGNode : AnalysisNode
     {
-        internal DAGNode(Address name, ushort index, bool showName)
+        internal DAGNode(Address name, ushort index, int statmentIndex, bool showName)
             : base(index)
         {
             Name = name;
+            NodeIndex = index;
             ShowName = showName;
+            StatmentIndex = statmentIndex;
         }
+
+        public ushort NodeIndex { get; }
+
+        public int StatmentIndex { get; }
 
         public DAGNode Parent { get; internal set; }
 
@@ -261,8 +267,8 @@ namespace Tuyin.IR.Analysis.Data
 
     public class DAGLoadNode : DAGNode
     {
-        internal DAGLoadNode(Address name, ushort index, bool showName, DAGStoreNode store, DAGNode[] fields) 
-            : base(name, index, showName)
+        internal DAGLoadNode(Address name, ushort index, int statmentIndex, bool showName, DAGStoreNode store, DAGNode[] fields) 
+            : base(name, index, statmentIndex, showName)
         {
             Store = store;
             Fields = fields;
@@ -280,8 +286,8 @@ namespace Tuyin.IR.Analysis.Data
 
     public class DAGStoreNode : DAGNode
     {
-        internal DAGStoreNode(Address name, ushort index, bool showName) 
-            : base(name, index, showName)
+        internal DAGStoreNode(Address name, ushort index,  int statmentIndex, bool showName) 
+            : base(name, index, statmentIndex, showName)
         {
             Childrens = new DAGNodeCollection(this);
         }
@@ -361,14 +367,13 @@ namespace Tuyin.IR.Analysis.Data
 
     public class DAGMicrocodeNode : DAGNode
     {
-        internal DAGMicrocodeNode(Address name, ushort index, Microcode atom, bool showName)
-            : base(name, index, showName)
+        internal DAGMicrocodeNode(Address name, ushort index, int statmentIndex, Microcode atom, bool showName)
+            : base(name, index, statmentIndex, showName)
         {
             Microcode = atom;
         }
 
         public Microcode Microcode { get; }
-
 
         internal override int BuildDot(DotNodeBuilder builder, Metadatas metadatas, int row, int column)
         {

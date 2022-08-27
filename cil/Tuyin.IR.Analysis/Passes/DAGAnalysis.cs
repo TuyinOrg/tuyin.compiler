@@ -19,28 +19,28 @@ namespace Tuyin.IR.Analysis.Passes
             var nodes = new Dictionary<string, DAGNode>();
             var edges = DynamicArray<AnalysisEdge>.Create(input.CFG.Statments.Count * 3);
 
-            DAGStoreNode GetParent(Address addr) 
+            DAGStoreNode GetParent(Address addr, int si) 
             {
                 if (addr == null || addr.Parent == null)
                     return null;
 
                 if (!nodes.ContainsKey(addr.Parent.Value))
-                    nodes[addr.Parent.Value] = new DAGStoreNode(addr.Parent, index++, true);
+                    nodes[addr.Parent.Value] = new DAGStoreNode(addr.Parent, index++, si, true);
 
                 return nodes[addr.Parent.Value] as DAGStoreNode;
             }
 
-            DAGNode GetState(AstNode node) 
+            DAGNode GetState(AstNode node, int si) 
             {
                 if (node?.NodeType == AstNodeType.Identifier)
                 {
                     DAGNode state = null;
 
-                    var parent = GetParent(node as Address);
+                    var parent = GetParent(node as Address, si);
                     var addr = node as Address;
                     if (!nodes.ContainsKey(addr.Value))
                     {
-                        state = nodes[addr.Value] = new DAGStoreNode(addr, index++, true);
+                        state = nodes[addr.Value] = new DAGStoreNode(addr, index++, si, true);
 
                         if (parent != null)
                             parent.Childrens.Add(state);
@@ -52,18 +52,18 @@ namespace Tuyin.IR.Analysis.Passes
 
                 var name = new Address($"Auto[{index}]");
                 var code = new Microcode(GetOpCode(node), GetOperand(node, input.CFG.Metadatas));
-                var dag = new DAGMicrocodeNode(name, index++, code, false);
+                var dag = new DAGMicrocodeNode(name, index++, si, code, false);
                 nodes[name.Value] = dag;
                 return dag;
             }
 
-            AnalysisEdge CreateEdge(AnalysisNode left, AstNode ast)
+            AnalysisEdge CreateEdge(AnalysisNode left, AstNode ast, int si)
             {
                 DAGNode subset = null;
 
-                var right = GetState(ast);
+                var right = GetState(ast, si);
                 if (right is DAGStoreNode store)
-                    subset = new DAGLoadNode(null, index++, false, store, store.Childrens.Columns.Values.Select(x => x.Node).ToArray());
+                    subset = new DAGLoadNode(null, index++, si, false, store, store.Childrens.Columns.Values.Select(x => x.Node).ToArray());
 
                 var edge = new AnalysisEdge(EdgeFlags.None, subset, left, right, ast.SourceSpan);
                 left.Rights.Add(edge);
@@ -78,12 +78,12 @@ namespace Tuyin.IR.Analysis.Passes
                 {
                     var id = store.Source as Identifier;
                     var val = store.Value;
-                    var left = GetState(id);
+                    var left = GetState(id, i);
                     if (val is Phi phi)
                     {
                         var rights = phi.Eexpressions.Cast<Identifier>();
                         foreach (var rid in rights)
-                            edges.Add(CreateEdge(left, rid));
+                            edges.Add(CreateEdge(left, rid, i));
                     }
                     else
                     {
@@ -91,22 +91,22 @@ namespace Tuyin.IR.Analysis.Passes
                         switch (rights.Length)
                         {
                             case 1:
-                                edges.Add(CreateEdge(left, rights[0]));
+                                edges.Add(CreateEdge(left, rights[0], i));
                                 break;
                             case 2:
-                                edges.Add(CreateEdge(left, rights[1]));
-                                edges.Add(CreateEdge(edges[^1].Target, rights[0]));
+                                edges.Add(CreateEdge(left, rights[1], i));
+                                edges.Add(CreateEdge(edges[^1].Target, rights[0], i));
                                 break;
                             case 3:
-                                edges.Add(CreateEdge(left, rights[2]));
-                                edges.Add(CreateEdge(edges[^1].Target, rights[0]));
-                                edges.Add(CreateEdge(edges[^2].Target, rights[1]));
+                                edges.Add(CreateEdge(left, rights[2], i));
+                                edges.Add(CreateEdge(edges[^1].Target, rights[0], i));
+                                edges.Add(CreateEdge(edges[^2].Target, rights[1], i));
                                 break;
                         }
                     }
                 }
                 else if(stmt is Return ret && ret.Expression != null)
-                    edges.Add(CreateEdge(GetState(ret), ret.Expression));
+                    edges.Add(CreateEdge(GetState(ret, i), ret.Expression, i));
             }
 
             return new DAG(input.CFG.Metadatas, edges, nodes.Values.ToArray());
