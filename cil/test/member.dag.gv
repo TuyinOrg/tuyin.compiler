@@ -1,6 +1,6 @@
 digraph
 {
-    "arg.1.0" [ label = <<table border="1" cellborder="0" cellpadding="2" cellspacing="1" style="ROUNDED"><tr><td colspan="0" rowspan="0"><font>arg.1.0</font></td><td colspan="1" rowspan="0"><font>a</font></td><td colspan="2" rowspan="0"><font>b</font></td></tr><tr><td colspan="0" rowspan="1"><font>0</font></td><td colspan="1" port="arg.1.0[a.1.0]" rowspan="1"><font>i32</font></td><td colspan="2" port="arg.1.0[b.1.0]" rowspan="1"><font color="#330908">i32</font></td></tr><tr><td colspan="0" rowspan="2"><font>1</font></td><td colspan="1" port="arg.1.0[a.1.1]" rowspan="2"><font color="#2b0c0c">i32</font></td><td colspan="2" port="arg.1.0[b.1.1]" rowspan="2"><font>i32</font></td></tr></table>>, shape = plain, style = rounded ]
+    "arg.1.0" [ label = <<table border="1" cellborder="0" cellpadding="2" cellspacing="1" style="ROUNDED"><tr><td colspan="0" rowspan="0"><font>arg.1.0</font></td><td colspan="1" rowspan="0"><font>a</font></td><td colspan="2" rowspan="0"><font>b</font></td></tr><tr><td colspan="0" rowspan="1"><font>0</font></td><td colspan="1" port="arg.1.0[a.1.0]" rowspan="1"><font>i32</font></td><td colspan="2" port="arg.1.0[b.1.0]" rowspan="1"><font color="#491111">i32</font></td></tr><tr><td colspan="0" rowspan="2"><font>1</font></td><td colspan="1" port="arg.1.0[a.1.1]" rowspan="2"><font color="#b5514f">i32</font></td><td colspan="2" port="arg.1.0[b.1.1]" rowspan="2"><font>i32</font></td></tr></table>>, shape = plain, style = rounded ]
     "Auto[3]" [ label = <<table border="1" cellborder="0" cellpadding="2" cellspacing="1" style="ROUNDED"><tr><td colspan="1" rowspan="0"><font>ldc 1</font></td></tr></table>>, shape = plain, style = rounded ]
     "Auto[5]" [ label = <<table border="1" cellborder="0" cellpadding="2" cellspacing="1" style="ROUNDED"><tr><td colspan="1" rowspan="0"><font>ldc 2</font></td></tr></table>>, shape = plain, style = rounded ]
     "Auto[7]" [ label = <<table border="1" cellborder="0" cellpadding="2" cellspacing="1" style="ROUNDED"><tr><td colspan="1" rowspan="0"><font>ldc 3</font></td></tr></table>>, shape = plain, style = rounded ]
@@ -15,7 +15,7 @@ digraph
     "arg.1.0":"arg.1.0[a.1.0]":_ -> "Auto[3]"
     "arg.1.0":"arg.1.0[a.1.1]":_ -> "Auto[5]"
     "arg.1.0":"arg.1.0[b.1.0]":_ -> "Auto[7]"
-    "Auto[8]":0:_ -> "arg.1.0" [ color = "#2b0c0c:#330908", fillcolor = black ]
+    "Auto[8]":0:_ -> "arg.1.0" [ color = "#b5514f:#491111", fillcolor = black ]
     "arg.1.0":"arg.1.0[b.1.1]":_ -> "Auto[11]"
     "a.1.0":0:_ -> "Auto[13]"
     "%5":0:_ -> "Auto[15]"

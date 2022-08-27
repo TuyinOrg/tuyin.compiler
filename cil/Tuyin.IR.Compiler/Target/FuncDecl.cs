@@ -62,8 +62,8 @@ namespace Tuyin.IR.Compiler.Target
                 linkage,
                 visibility,
                 new Identifier(nt3_s.Name.strRead),
-                scope,
-                nt5_s.Select(x => new Parameter(new Identifier(x.Name.strRead))), builder);
+                nt5_s.Select(x => new Parameter(new Identifier(x.Name.strRead))),
+                builder);
 
             return func;
         }

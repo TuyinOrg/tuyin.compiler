@@ -15,9 +15,6 @@
         Float32,
         Float64,
         Char,
-        String,
-        Ingeter,
-        Float,
-        Address
+        String
     }
 }

@@ -11,21 +11,18 @@ namespace Tuyin.IR.Reflection
         public Linkage Linkage { get; }
 
         public Visibility Visibility { get; }
-
+        
         public Identifier Identifier { get; }
-
-        public Scope Scope { get; }
 
         public IReadOnlyList<Parameter> Parameters { get; }
 
         public IReadOnlyList<Statment> Statments { get; }
 
-        public Function(Linkage linkage, Visibility visibility, Identifier identifier, Scope scope, IEnumerable<Parameter> args, IEnumerable<Statment> stmts)
+        public Function(Linkage linkage, Visibility visibility, Identifier identifier, IEnumerable<Parameter> args, IEnumerable<Statment> stmts)
         {
             Linkage = linkage;
             Visibility = visibility;
             Identifier = identifier;
-            Scope = scope;
             Parameters = args.ToArray();
             Statments = stmts.ToArray();
         }

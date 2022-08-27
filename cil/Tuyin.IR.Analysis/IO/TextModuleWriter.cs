@@ -1,7 +1,9 @@
 ﻿using System.IO;
+using Tuyin.IR.Reflection;
+using Tuyin.IR.Reflection.Instructions;
 using Tuyin.IR.Reflection.Symbols;
 
-namespace Tuyin.IR.Reflection.IO
+namespace Tuyin.IR.Analysis.IO
 {
     class TextModuleWriter : ModuleWriter
     {
@@ -15,11 +17,11 @@ namespace Tuyin.IR.Reflection.IO
             throw new System.NotImplementedException();
         }
 
-        internal override void WriteFunction(Function function)
+        internal override void WriteFunction(Function function, Data.DAG dAG)
         {
         }
 
-        internal override void WriteImport(Instructions.String[] path, Instructions.Identifier id)
+        internal override void WriteImport(String[] path, Identifier id)
         {
         }
 
@@ -27,7 +29,7 @@ namespace Tuyin.IR.Reflection.IO
         {
         }
 
-        internal override void WriteNamespace(Instructions.String[] path)
+        internal override void WriteNamespace(String[] path)
         {
         }
 

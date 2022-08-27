@@ -45,12 +45,6 @@ namespace Tuyin.IR.Compiler.Target
                 Namespace.ToStrings(),
                 Declares.Where(x => x.DeclareType == DeclareType.Function).Cast<FuncDecl>().Select(x => x.ToIR())).Import(Imports.Select(x => new Reflection.Import(x.Path.ToStrings(), new Reflection.Instructions.Identifier(x.Path[0].strRead))));
 
-            var metadatas = new DIMetadataManager();
-            module.Save(metadatas,
-                System.IO.Path.Combine(
-                    System.IO.Path.GetDirectoryName(FileName),
-                    System.IO.Path.GetFileNameWithoutExtension(FileName) + ".trv"), ModuleTarget.Binary);
-
             return module;
         }
 

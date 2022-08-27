@@ -23,10 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="IO\DIMetadataParser.gram" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Include="..\..\libs\libfsm\TwoKeyDictionary.cs" Link="TwoKeyDictionary.cs" />
     <Compile Include="..\..\tool\first_dsl\U\U_Tuple.cs" Link="Symbols\U_Tuple.cs" />
     <Compile Include="..\..\tool\first_dsl\U_Lexer.cs" Link="Symbols\U_Lexer.cs" />

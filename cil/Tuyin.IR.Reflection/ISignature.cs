@@ -10,7 +10,7 @@ namespace Tuyin.IR.Reflection
         bool Is(ISignature other);
     }
 
-    abstract class MetadataSignature : ISignature, IEquatable<ISignature>
+    public abstract class MetadataSignature : ISignature, IEquatable<ISignature>
     {
         public abstract string Content { get; }
 
@@ -88,7 +88,7 @@ namespace Tuyin.IR.Reflection
         }
     }
 
-    class ModuleSignature : MetadataSignature
+    public class ModuleSignature : MetadataSignature
     {
         public override string Content => FileName;
 

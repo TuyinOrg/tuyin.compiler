@@ -1,9 +1,11 @@
 ﻿using System.IO;
+using Tuyin.IR.Analysis.Data;
+using Tuyin.IR.Reflection;
 using Tuyin.IR.Reflection.Instructions;
 using Tuyin.IR.Reflection.Symbols;
 using String = Tuyin.IR.Reflection.Instructions.String;
 
-namespace Tuyin.IR.Reflection.IO
+namespace Tuyin.IR.Analysis.IO
 {
     abstract class ModuleWriter
     {
@@ -21,7 +23,7 @@ namespace Tuyin.IR.Reflection.IO
         internal abstract void WriteNamespace(String[] path);
         internal abstract void WriteSignature(ISignature signature);
         internal abstract void WriteImport(String[] path, Identifier identifier);
-        internal abstract void WriteFunction(Function function);
+        internal abstract void WriteFunction(Function function, DAG dAG);
         internal abstract void WriteMetadata(DIMetadata dIMetadata);
         internal abstract void Flush();
     }

@@ -1,8 +1,9 @@
 ﻿using System.IO;
+using Tuyin.IR.Reflection;
 using Tuyin.IR.Reflection.Instructions;
 using Tuyin.IR.Reflection.Symbols;
 
-namespace Tuyin.IR.Reflection.IO
+namespace Tuyin.IR.Analysis.IO
 {
     internal class TextModuleReader : ModuleReader
     {
