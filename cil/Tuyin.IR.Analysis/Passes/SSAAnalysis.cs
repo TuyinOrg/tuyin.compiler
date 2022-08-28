@@ -179,8 +179,14 @@ namespace Tuyin.IR.Analysis.Passes
         public override SSA VisitTest(Test ast)
         {
             var cond = Visit(ast.Expression);
-            if(cond.Value.ConstantExpression != null)
-                return new SSA(mStatmentIndex, true, ast, new Test(ast.Label, cond.Value));
+            if (cond.Value.ConstantExpression != null)
+            {
+                var v = E.Lambda(cond.Value.ConstantExpression).Compile().DynamicInvoke();
+                if ((int)v >= 1)
+                    return null;
+
+                return new SSA(mStatmentIndex, true, ast, new Goto(ast.Label));
+            }
 
             return new SSA(mStatmentIndex, true, ast, new Test(ast.Label, cond.Source), cond);
         }

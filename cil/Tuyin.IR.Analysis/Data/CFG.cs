@@ -51,7 +51,10 @@ namespace Tuyin.IR.Analysis.Data
                 var label = $"label {state.Index}";
                 var builder = new DotRecordBuilder()
                     .AppendField(label)
-                    .AppendField(string.Join(System.Environment.NewLine, Statments.GetRange(state.Scope.Start, state.Scope.End - state.Scope.Start).Select(x => x.ToString())));
+                    .AppendField(string.Join(System.Environment.NewLine, Statments.GetRange(state.Scope.Start, state.Vaild - state.Scope.Start).Select(x => x.ToString())));
+
+                if(state.Scope.End - state.Vaild > 0)
+                    builder.AppendField(string.Join(System.Environment.NewLine, Statments.GetRange(state.Vaild, state.Scope.End - state.Vaild).Select(x => "[×]" + x.ToString())));
 
                 if (state.Rights.Count > 0)
                 {
@@ -107,11 +110,14 @@ namespace Tuyin.IR.Analysis.Data
 
     public class CFGBlockNode : CFGNode
     {
-        public CFGBlockNode(ushort index, Scope scope)
+        public CFGBlockNode(ushort index, int vaild, Scope scope)
             : base(index)
         {
             Scope = scope;
+            Vaild = vaild;
         }
+
+        public int Vaild { get; }
 
         public Scope Scope { get; }
     }
