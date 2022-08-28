@@ -45,15 +45,13 @@ namespace Tuyin.IR.Analysis.Passes
             for (var i = 0; i < scopes.Count; i++)
             {
                 var scope = scopes[i];
-                if (blocks[i])
-                    continue;
-
-                if (scope.Case0 != -1 && scope.Case1 < nexts.Length) 
+                if (scope.Case0 != -1 && scope.Case1 < nexts.Length && !blocks[input.Branch.StatmentBranches[scope.Case0]]) 
                     edges.Add(Edge(nodes[i], nodes[nexts[scope.Case0]]));
 
-                if (scope.Case1 != -1 && scope.Case1 < nexts.Length) 
+                if (scope.Case1 != -1 && scope.Case1 < nexts.Length && !blocks[input.Branch.StatmentBranches[scope.Case1]])
                     edges.Add(Edge(nodes[i], nodes[nexts[scope.Case1]]));
             }
+
 
             return new CFG(edges, nodes, input.Statments, metadatas);
         }
