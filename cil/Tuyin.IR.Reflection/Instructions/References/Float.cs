@@ -4,14 +4,16 @@ namespace Tuyin.IR.Reflection.Instructions
 {
     public class Float : Reference
     {
-        public Float(BigFloat value)
+        public Float(float value)
         {
             Value = value;
         }
 
         public override AstNodeType NodeType => AstNodeType.Float;
 
-        public BigFloat Value { get; }
+        public float Value { get; }
+
+        public override System.Linq.Expressions.Expression ConstantExpression => System.Linq.Expressions.Expression.Constant(Value);
 
         public override IEnumerable<AstNode> GetNodes()
         {

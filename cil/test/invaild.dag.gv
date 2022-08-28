@@ -1,22 +1,13 @@
 digraph
 {
-    "%0" [ label = <<table border="1" cellborder="0" cellpadding="2" cellspacing="1" style="ROUNDED"><tr><td colspan="0" rowspan="0"><font>%0</font></td></tr><tr><td colspan="0" port="0" rowspan="1"><font>i32</font></td></tr></table>>, shape = plain, style = rounded ]
+    "Auto[1]" [ label = <<table border="1" cellborder="0" cellpadding="2" cellspacing="1" style="ROUNDED"><tr><td colspan="1" rowspan="0"><font>ret</font></td></tr><tr><td colspan="1" port="0" rowspan="1"><font>i32</font></td></tr></table>>, shape = plain, style = rounded ]
     "Auto[2]" [ label = <<table border="1" cellborder="0" cellpadding="2" cellspacing="1" style="ROUNDED"><tr><td colspan="1" rowspan="0"><font>ldc 1</font></td></tr></table>>, shape = plain, style = rounded ]
-    "%1" [ label = <<table border="1" cellborder="0" cellpadding="2" cellspacing="1" style="ROUNDED"><tr><td colspan="0" rowspan="0"><font>%1</font></td></tr><tr><td colspan="0" port="0" rowspan="1"><font>i32</font></td></tr></table>>, shape = plain, style = rounded ]
-    "Auto[4]" [ label = <<table border="1" cellborder="0" cellpadding="2" cellspacing="1" style="ROUNDED"><tr><td colspan="1" rowspan="0"><font>ldc 1</font></td></tr></table>>, shape = plain, style = rounded ]
+    "Auto[3]" [ label = <<table border="1" cellborder="0" cellpadding="2" cellspacing="1" style="ROUNDED"><tr><td colspan="1" rowspan="0"><font>ret</font></td></tr><tr><td colspan="1" port="0" rowspan="1"><font>i32</font></td></tr></table>>, shape = plain, style = rounded ]
+    "Auto[4]" [ label = <<table border="1" cellborder="0" cellpadding="2" cellspacing="1" style="ROUNDED"><tr><td colspan="1" rowspan="0"><font>ldc 2</font></td></tr></table>>, shape = plain, style = rounded ]
     "Auto[5]" [ label = <<table border="1" cellborder="0" cellpadding="2" cellspacing="1" style="ROUNDED"><tr><td colspan="1" rowspan="0"><font>ret</font></td></tr><tr><td colspan="1" port="0" rowspan="1"><font>i32</font></td></tr></table>>, shape = plain, style = rounded ]
-    "%2" [ label = <<table border="1" cellborder="0" cellpadding="2" cellspacing="1" style="ROUNDED"><tr><td colspan="0" rowspan="0"><font>%2</font></td></tr><tr><td colspan="0" port="0" rowspan="1"><font>i32</font></td></tr></table>>, shape = plain, style = rounded ]
-    "Auto[8]" [ label = <<table border="1" cellborder="0" cellpadding="2" cellspacing="1" style="ROUNDED"><tr><td colspan="1" rowspan="0"><font>ldc 2</font></td></tr></table>>, shape = plain, style = rounded ]
-    "Auto[9]" [ label = <<table border="1" cellborder="0" cellpadding="2" cellspacing="1" style="ROUNDED"><tr><td colspan="1" rowspan="0"><font>ret</font></td></tr><tr><td colspan="1" port="0" rowspan="1"><font>i32</font></td></tr></table>>, shape = plain, style = rounded ]
-    "%3" [ label = <<table border="1" cellborder="0" cellpadding="2" cellspacing="1" style="ROUNDED"><tr><td colspan="0" rowspan="0"><font>%3</font></td></tr><tr><td colspan="0" port="0" rowspan="1"><font>i32</font></td></tr></table>>, shape = plain, style = rounded ]
-    "Auto[12]" [ label = <<table border="1" cellborder="0" cellpadding="2" cellspacing="1" style="ROUNDED"><tr><td colspan="1" rowspan="0"><font>ldc 1</font></td></tr></table>>, shape = plain, style = rounded ]
-    "Auto[13]" [ label = <<table border="1" cellborder="0" cellpadding="2" cellspacing="1" style="ROUNDED"><tr><td colspan="1" rowspan="0"><font>ret</font></td></tr><tr><td colspan="1" port="0" rowspan="1"><font>i32</font></td></tr></table>>, shape = plain, style = rounded ]
+    "Auto[6]" [ label = <<table border="1" cellborder="0" cellpadding="2" cellspacing="1" style="ROUNDED"><tr><td colspan="1" rowspan="0"><font>ldc 1</font></td></tr></table>>, shape = plain, style = rounded ]
 
-    "%0":0:_ -> "Auto[2]"
-    "%1":0:_ -> "Auto[4]"
-    "Auto[5]":0:_ -> "%1" [ color = "", fillcolor = black ]
-    "%2":0:_ -> "Auto[8]"
-    "Auto[9]":0:_ -> "%2" [ color = "", fillcolor = black ]
-    "%3":0:_ -> "Auto[12]"
-    "Auto[13]":0:_ -> "%3" [ color = "", fillcolor = black ]
+    "Auto[1]":0:_ -> "Auto[2]"
+    "Auto[3]":0:_ -> "Auto[4]"
+    "Auto[5]":0:_ -> "Auto[6]"
 }

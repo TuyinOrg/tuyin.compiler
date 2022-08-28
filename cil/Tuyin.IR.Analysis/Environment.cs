@@ -120,7 +120,7 @@ namespace Tuyin.IR.Analysis
                 var ssa = new SSAAnalysis().Run(new SSAAnalysisOpation(bra, stmts));
                 var cfg = new CFGAnalysis().Run(new CFGAnalysisOpation(ssa));
                 var dag = new DAGAnalysis().Run(new DAGAnalysisOpation(cfg));
-                var pat = new PATHAnalysis().Run(new PathAnalysisOpation(new BranchAnalysis().Run(ssa), dag));
+                var pat = new PATHAnalysis().Run(new PATHAnalysisOpation(cfg, dag));
                 var vet = new VectorAnalysis().Run(new VectorAnalysisOpation(dag, cfg));
 
                 mComputeUnits.Add(new ComputeUnit((ushort)i, func, bra, cfg, dag, pat, vet));

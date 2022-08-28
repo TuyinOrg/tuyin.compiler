@@ -18,7 +18,7 @@ namespace Tuyin.IR.Compiler.Target
 
         protected override Expression CreateIR(StatmentBuilder cache)
         {
-            return new Float(BigFloat.Parse(nt1_s.strRead));
+            return new Float(float.Parse(nt1_s.strRead));
         }
     }
 }

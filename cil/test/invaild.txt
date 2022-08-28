@@ -2,7 +2,7 @@ namespace test;
 
 func Main(arg) 
 {
-if(true) {
+if(1 + 2 > 0) {
   return 1;
 }
 else {

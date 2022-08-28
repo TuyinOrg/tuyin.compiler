@@ -18,7 +18,7 @@ namespace Tuyin.IR.Compiler.Target
 
         protected override Expression CreateIR(StatmentBuilder cache)
         {
-            return new Integer(BigInteger.Parse(nt1_s.strRead));
+            return new Integer(int.Parse(nt1_s.strRead));
         }
     }
 }
