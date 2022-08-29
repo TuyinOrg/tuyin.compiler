@@ -4,6 +4,7 @@ using Tuyin.IR.Analysis.Data;
 using Tuyin.IR.Reflection;
 using Tuyin.IR.Reflection.Instructions;
 using Tuyin.IR.Reflection.Symbols;
+using System.Linq;
 
 namespace Tuyin.IR.Analysis.IO
 {
@@ -31,8 +32,9 @@ namespace Tuyin.IR.Analysis.IO
             mBinaryWriter.BaseStream.Close();
         }
 
-        internal override void WriteFunction(Function func, DAG dag)
+        internal override void WriteComputeUnit(ComputeUnit unit)
         {
+            var func = unit.Function;   
             mBinaryWriter.Write((byte)func.Linkage);
             mBinaryWriter.Write((byte)func.Visibility);
             mBinaryWriter.Write(WriteString(func.Identifier.Value));
@@ -46,7 +48,7 @@ namespace Tuyin.IR.Analysis.IO
                 mBinaryWriter.Write(p.SourceSpan.EndIndex);
             }
 
-            var codes = GenerateMicrocodes(dag);
+            var codes = GenerateMicrocodes(unit.CFG, unit.DAG);
             mBinaryWriter.Write(codes.Length);
             foreach (var code in codes) 
             {
@@ -101,28 +103,40 @@ namespace Tuyin.IR.Analysis.IO
         /// <summary>
         /// 生产微码
         /// </summary>
-        private IReadOnlyArray<Microcode> GenerateMicrocodes(DAG dag)
+        private IReadOnlyArray<Microcode> GenerateMicrocodes(CFG cfg, DAG dag)
         {
-            DynamicArray<Microcode> codes = new DynamicArray<Microcode>(dag.Vertices.Count);
-            Stack<AnalysisNode> nodes = new Stack<AnalysisNode>();
-          
+            var dagNodes = dag.Vertices.GroupBy(x => x.StatmentIndex).ToDictionary(x => x.Key, x => x.ToArray());
+            var codes = new DynamicArray<Microcode>(dag.Vertices.Count);
+            var nodes = new Stack<CFGBlockNode>();
+            nodes.Push(cfg.Vertices[0]);
             while (nodes.Count > 0) 
             {
                 var node = nodes.Pop();
-                if (node is DAGMicrocodeNode code)
+                for (var i = node.Scope.Start; i < node.Vaild; i++) 
                 {
-                    if (codes.Count == 0)
-                        codes.Add(code.Microcode);
-                    else
-                        codes.Insert(0, code.Microcode);
+                    if (dagNodes.ContainsKey(i))
+                    {
+                        var dags = dagNodes[i];
+                        for (int x = 0; x < dags.Length; x++)
+                        {
+                            if (dags[x] is DAGMicrocodeNode mn)
+                            {
+                                if (codes.Count == 0)
+                                    codes.Add(mn.Microcode);
+                                else
+                                    codes.Insert(0, mn.Microcode);
+                            }
+                            else if (dags[x] is DAGStoreNode sn)
+                            {
 
-                    if (code.Microcode.FlowType == FlowType.Return ||
-                        code.Microcode.FlowType == FlowType.Branch)
-                        continue;
+                            }
+                            else throw new System.NotImplementedException();
+                        }
+                    }
                 }
 
                 foreach (var right in node.Rights)
-                    nodes.Push(right.Target);
+                    nodes.Push(right.Target as CFGBlockNode);
             }
 
             return codes;

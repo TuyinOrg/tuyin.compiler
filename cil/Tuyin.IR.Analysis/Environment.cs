@@ -70,7 +70,7 @@ namespace Tuyin.IR.Analysis
                 writer.WriteMetadata(module.Metadatas[i]);
 
             foreach (var unit in computeUnits)
-                writer.WriteFunction(unit.Function, unit.DAG);
+                writer.WriteComputeUnit(unit);
 
             writer.Flush();
             stream.Flush();

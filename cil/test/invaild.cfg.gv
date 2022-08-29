@@ -1,6 +1,12 @@
 digraph
 {
-    "label 1" [ label = "{ label\ 1 | ret\ ldc\ 1 | [×]goto\ 3 }", shape = record, style = rounded ]
-    "label 2" [ label = "{ label\ 2 | ret\ ldc\ 2 }", shape = record, style = rounded ]
-    "label 3" [ label = "{ label\ 3 | ret\ ldc\ 1 }", shape = record, style = rounded ]
+    "label 1" [ label = "{ label\ 1 | store\ %2,ldc\ 1\nstore\ %1,ldc\ 2\nstore\ %3,add\ %2,%1\nstore\ %0,ldc\ 0\nstore\ %4,gt\ %3,%0\ntest\ %4:9 | { <true> T | <false> F } }", shape = record, style = rounded ]
+    "label 2" [ label = "{ label\ 2 | store\ %5,ldc\ 1\nret\ %5\ngoto\ 11 }", shape = record, style = rounded ]
+    "label 3" [ label = "{ label\ 3 | store\ %6,ldc\ 2\nret\ %6 }", shape = record, style = rounded ]
+    "label 4" [ label = "{ label\ 4 | store\ %7,ldc\ 1\nret\ %7 }", shape = record, style = rounded ]
+
+    "label 1":false:c -> "label 3"
+    "label 1":true:c -> "label 2"
+    "label 2" -> "label 4"
+    "label 3" -> "label 4"
 }

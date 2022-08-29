@@ -23,7 +23,7 @@ namespace Tuyin.IR.Analysis.IO
         internal abstract void WriteNamespace(String[] path);
         internal abstract void WriteSignature(ISignature signature);
         internal abstract void WriteImport(String[] path, Identifier identifier);
-        internal abstract void WriteFunction(Function function, DAG dAG);
+        internal abstract void WriteComputeUnit(ComputeUnit unit);
         internal abstract void WriteMetadata(DIMetadata dIMetadata);
         internal abstract void Flush();
     }

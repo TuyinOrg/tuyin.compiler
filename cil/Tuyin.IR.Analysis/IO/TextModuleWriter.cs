@@ -17,7 +17,7 @@ namespace Tuyin.IR.Analysis.IO
             throw new System.NotImplementedException();
         }
 
-        internal override void WriteFunction(Function function, Data.DAG dAG)
+        internal override void WriteComputeUnit(ComputeUnit unit)
         {
         }
 
