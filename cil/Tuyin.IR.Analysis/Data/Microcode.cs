@@ -11,6 +11,8 @@ namespace Tuyin.IR.Analysis.Data
 
         public OperandType OperandType => OpCode.GetOperandType();
 
+        public FlowType FlowType => OpCode.GetFlowType();
+
         public Microcode(OpCode opcode, Union8 operand)
         {
             OpCode = opcode;

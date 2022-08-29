@@ -1,25 +1,12 @@
 digraph
 {
-    "arg.1.0" [ label = <<table border="1" cellborder="0" cellpadding="2" cellspacing="1" style="ROUNDED"><tr><td colspan="0" rowspan="0"><font>arg.1.0</font></td><td colspan="1" rowspan="0"><font>a</font></td><td colspan="2" rowspan="0"><font>b</font></td></tr><tr><td colspan="0" rowspan="1"><font>0</font></td><td colspan="1" port="arg.1.0[a.1.0]" rowspan="1"><font>i32</font></td><td colspan="2" port="arg.1.0[b.1.0]" rowspan="1"><font color="#440706">i32</font></td></tr><tr><td colspan="0" rowspan="2"><font>1</font></td><td colspan="1" port="arg.1.0[a.1.1]" rowspan="2"><font color="#db1f1c">i32</font></td><td colspan="2" port="arg.1.0[b.1.1]" rowspan="2"><font>i32</font></td></tr></table>>, shape = plain, style = rounded ]
-    "Auto[3]" [ label = <<table border="1" cellborder="0" cellpadding="2" cellspacing="1" style="ROUNDED"><tr><td colspan="1" rowspan="0"><font>ldc 1</font></td></tr></table>>, shape = plain, style = rounded ]
-    "Auto[5]" [ label = <<table border="1" cellborder="0" cellpadding="2" cellspacing="1" style="ROUNDED"><tr><td colspan="1" rowspan="0"><font>ldc 2</font></td></tr></table>>, shape = plain, style = rounded ]
-    "Auto[7]" [ label = <<table border="1" cellborder="0" cellpadding="2" cellspacing="1" style="ROUNDED"><tr><td colspan="1" rowspan="0"><font>ldc 3</font></td></tr></table>>, shape = plain, style = rounded ]
-    "Auto[8]" [ label = <<table border="1" cellborder="0" cellpadding="2" cellspacing="1" style="ROUNDED"><tr><td colspan="1" rowspan="0"><font>ret</font></td></tr><tr><td colspan="1" port="0" rowspan="1"><font>a:i32,b:i32</font></td></tr></table>>, shape = plain, style = rounded ]
-    "Auto[11]" [ label = <<table border="1" cellborder="0" cellpadding="2" cellspacing="1" style="ROUNDED"><tr><td colspan="1" rowspan="0"><font>ldc 4</font></td></tr></table>>, shape = plain, style = rounded ]
-    "a.1.0" [ label = <<table border="1" cellborder="0" cellpadding="2" cellspacing="1" style="ROUNDED"><tr><td colspan="0" rowspan="0"><font>a.1.0</font></td></tr><tr><td colspan="0" port="0" rowspan="1"><font>i32</font></td></tr></table>>, shape = plain, style = rounded ]
-    "Auto[13]" [ label = <<table border="1" cellborder="0" cellpadding="2" cellspacing="1" style="ROUNDED"><tr><td colspan="1" rowspan="0"><font>ldc 2</font></td></tr></table>>, shape = plain, style = rounded ]
-    "%5" [ label = <<table border="1" cellborder="0" cellpadding="2" cellspacing="1" style="ROUNDED"><tr><td colspan="0" rowspan="0"><font>%5</font></td></tr><tr><td colspan="0" port="0" rowspan="1"><font>i32</font></td></tr></table>>, shape = plain, style = rounded ]
-    "Auto[15]" [ label = <<table border="1" cellborder="0" cellpadding="2" cellspacing="1" style="ROUNDED"><tr><td colspan="1" rowspan="0"><font>add</font></td></tr><tr><td colspan="1" port="0" rowspan="1"><font>i32</font></td><td colspan="1" port="1" rowspan="1"><font>i32</font></td></tr></table>>, shape = plain, style = rounded ]
-    "Auto[18]" [ label = <<table border="1" cellborder="0" cellpadding="2" cellspacing="1" style="ROUNDED"><tr><td colspan="1" rowspan="0"><font>ret</font></td></tr><tr><td colspan="1" port="0" rowspan="1"><font>i32</font></td></tr></table>>, shape = plain, style = rounded ]
+    "arg.1.0" [ label = <<table border="1" cellborder="0" cellpadding="2" cellspacing="1" style="ROUNDED"><tr><td colspan="0"><font>arg.1.0</font></td><td colspan="1"><font>a</font></td><td colspan="2"><font>b</font></td></tr><tr><td colspan="0"><font>0</font></td><td colspan="2" port="arg.1.0[b.1.0]"><font color="#d14745">i32</font></td></tr><tr><td colspan="0"><font>1</font></td><td colspan="1" port="arg.1.0[a.1.1]"><font color="#d84947">i32</font></td></tr></table>>, shape = plain, style = rounded ]
+    "Auto[3]" [ label = <<table border="1" cellborder="0" cellpadding="2" cellspacing="1" style="ROUNDED"><tr><td colspan="1"><font>ldc 1</font></td></tr></table>>, shape = plain, style = rounded ]
+    "Auto[5]" [ label = <<table border="1" cellborder="0" cellpadding="2" cellspacing="1" style="ROUNDED"><tr><td colspan="1"><font>ldc 2</font></td></tr></table>>, shape = plain, style = rounded ]
+    "Auto[7]" [ label = <<table border="1" cellborder="0" cellpadding="2" cellspacing="1" style="ROUNDED"><tr><td colspan="1"><font>ldc 3</font></td></tr></table>>, shape = plain, style = rounded ]
+    "Auto[8]" [ label = <<table border="1" cellborder="0" cellpadding="2" cellspacing="1" style="ROUNDED"><tr><td colspan="1"><font>ret</font></td></tr><tr><td colspan="1" port="0"><font>a:i32,b:i32</font></td></tr></table>>, shape = plain, style = rounded ]
 
-    "arg.1.0":"arg.1.0[a.1.0]":_ -> "Auto[3]"
     "arg.1.0":"arg.1.0[a.1.1]":_ -> "Auto[5]"
     "arg.1.0":"arg.1.0[b.1.0]":_ -> "Auto[7]"
-    "Auto[8]":0:_ -> "arg.1.0" [ color = "#db1f1c:#440706", fillcolor = black ]
-    "arg.1.0":"arg.1.0[b.1.1]":_ -> "Auto[11]"
-    "a.1.0":0:_ -> "Auto[13]"
-    "%5":0:_ -> "Auto[15]"
-    "Auto[15]":0:_ -> "arg.1.0":"arg.1.0[b.1.1]":_ [ color = "", fillcolor = black ]
-    "Auto[15]":1:_ -> "a.1.0" [ color = "", fillcolor = black ]
-    "Auto[18]":0:_ -> "%5" [ color = "", fillcolor = black ]
+    "Auto[8]":0:_ -> "arg.1.0" [ color = "#d84947:#d14745", fillcolor = black ]
 }

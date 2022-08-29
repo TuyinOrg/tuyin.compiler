@@ -63,16 +63,36 @@ namespace Tuyin.IR.Analysis.Passes
 
                 var right = GetState(ast, si);
                 if (right is DAGStoreNode store)
-                    subset = new DAGLoadNode(null, index++, si, false, store, store.Childrens.Columns.Values.Select(x => x.Node).ToArray());
-
+                {
+                    var childrens = store.Childrens.Columns.Values.Select(x => x.Node).ToArray();
+                    subset = new DAGLoadNode(null, index++, si, false, store, childrens);
+                    foreach (var child in childrens)
+                        child.ReferenceAmount++;
+                }
                 var edge = new AnalysisEdge(EdgeFlags.None, subset, left, right, ast.SourceSpan);
                 left.Rights.Add(edge);
                 right.Lefts.Add(edge);
                 return edge;
             }
 
+            bool[] vailds = new bool[input.CFG.Statments.Count];
+            if (input.Settings.ClearInvaildStatment)
+            {
+                for (var i = 0; i < input.CFG.Vertices.Count; i++)
+                {
+                    var scope = input.CFG.Vertices[i];
+                    for (var x = scope.Scope.Start; x < scope.Vaild; x++)
+                    {
+                        vailds[x] = true;
+                    }
+                }
+            }
+
             for (var i = 0; i < input.CFG.Statments.Count; i++) 
             {
+                if (input.Settings.ClearInvaildStatment && !vailds[i])
+                    continue;
+
                 var stmt = input.CFG.Statments[i];
                 if (stmt is Store store)
                 {
@@ -107,6 +127,30 @@ namespace Tuyin.IR.Analysis.Passes
                 }
                 else if(stmt is Return ret && ret.Expression != null)
                     edges.Add(CreateEdge(GetState(ret, i), ret.Expression, i));
+            }
+
+            // 清理引用计数
+            if (input.Settings.ClearInvaildMember)
+            {
+                foreach (var key in nodes.Keys.ToArray())
+                {
+                    var node = nodes[key];
+                    if (node.Parent != null && node.ReferenceAmount == 0)
+                    {
+                        nodes.Remove(key);
+                        foreach (var left in node.Lefts)
+                        {
+                            left.Source.Rights.Remove(left);
+                            edges.Remove(left);
+                        }
+
+                        foreach (var right in node.Rights)
+                        {
+                            right.Target.Lefts.Remove(right);
+                            edges.Remove(right);
+                        }
+                    }
+                }
             }
 
             return new DAG(input.CFG.Metadatas, edges, nodes.Values.ToArray());
@@ -169,11 +213,14 @@ namespace Tuyin.IR.Analysis.Passes
 
     class DAGAnalysisOpation
     {
-        internal DAGAnalysisOpation(CFG cfg)
+        internal DAGAnalysisOpation(CFG cfg, EnvironmentSettings settings)
         {
             CFG = cfg;
+            Settings = settings;
         }
 
         public CFG CFG { get; }
+
+        public EnvironmentSettings Settings { get; }
     }
 }

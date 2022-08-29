@@ -105,16 +105,21 @@ namespace Tuyin.IR.Analysis.IO
         {
             DynamicArray<Microcode> codes = new DynamicArray<Microcode>(dag.Vertices.Count);
             Stack<AnalysisNode> nodes = new Stack<AnalysisNode>();
-            nodes.Push(dag.Entry);
-
+          
             while (nodes.Count > 0) 
             {
                 var node = nodes.Pop();
                 if (node is DAGMicrocodeNode code)
+                {
                     if (codes.Count == 0)
                         codes.Add(code.Microcode);
                     else
                         codes.Insert(0, code.Microcode);
+
+                    if (code.Microcode.FlowType == FlowType.Return ||
+                        code.Microcode.FlowType == FlowType.Branch)
+                        continue;
+                }
 
                 foreach (var right in node.Rights)
                     nodes.Push(right.Target);

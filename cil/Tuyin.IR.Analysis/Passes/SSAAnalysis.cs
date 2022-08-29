@@ -17,6 +17,7 @@ namespace Tuyin.IR.Analysis.Passes
         private int mStatmentOffset;
         private VisitMode mVisitMode;
         private Branch mBranchInfo;
+        private EnvironmentSettings mSettings;
         private TwoKeyDictionary<int, string, SSAReference> mDefUse;
 
         internal SSAAnalysis()
@@ -36,10 +37,11 @@ namespace Tuyin.IR.Analysis.Passes
         public IReadOnlyList<Statment> Run(SSAAnalysisOpation input)
         {
             ResetParams();
-
+ 
             var ssas = new List<Statment>();
             var inserts = new List<SSAIntertStatment>();
             var statments = new List<Statment>(input.Statments);
+            mSettings = input.Settings;
             mBranchInfo = input.Branch;
 
             var list = new List<int>();
@@ -179,7 +181,7 @@ namespace Tuyin.IR.Analysis.Passes
         public override SSA VisitTest(Test ast)
         {
             var cond = Visit(ast.Expression);
-            if (cond.Value.ConstantExpression != null)
+            if (mSettings.ConstantOptimize && cond.Value.ConstantExpression != null)
             {
                 var v = E.Lambda(cond.Value.ConstantExpression).Compile().DynamicInvoke();
                 if ((int)v >= 1)
@@ -200,7 +202,7 @@ namespace Tuyin.IR.Analysis.Passes
         {
             var right = Visit(ast.Right);
             var left = Visit(ast.Left);
-            if (left.Value.ConstantExpression != null && right.Value.ConstantExpression != null)
+            if (mSettings.ConstantOptimize && left.Value.ConstantExpression != null && right.Value.ConstantExpression != null)
             {
                 var e = E.Add(left.Value.ConstantExpression, right.Value.ConstantExpression).Reduce();
                 var v = E.Lambda(e).Compile().DynamicInvoke();
@@ -215,7 +217,7 @@ namespace Tuyin.IR.Analysis.Passes
         {
             var right = Visit(ast.Right);
             var left = Visit(ast.Left);
-            if (left.Value.ConstantExpression != null && right.Value.ConstantExpression != null)
+            if (mSettings.ConstantOptimize && left.Value.ConstantExpression != null && right.Value.ConstantExpression != null)
             {
                 var e = E.And(left.Value.ConstantExpression, right.Value.ConstantExpression).Reduce();
                 var v = E.Lambda(e).Compile().DynamicInvoke();
@@ -237,7 +239,7 @@ namespace Tuyin.IR.Analysis.Passes
         {
             var right = Visit(ast.Right);
             var left = Visit(ast.Left);
-            if (left.Value.ConstantExpression != null && right.Value.ConstantExpression != null)
+            if (mSettings.ConstantOptimize && left.Value.ConstantExpression != null && right.Value.ConstantExpression != null)
             {
                 var e = E.Divide(left.Value.ConstantExpression, right.Value.ConstantExpression).Reduce();
                 var v = E.Lambda(e).Compile().DynamicInvoke();
@@ -259,6 +261,14 @@ namespace Tuyin.IR.Analysis.Passes
         {
             var right = Visit(ast.Right);
             var left = Visit(ast.Left);
+            if (mSettings.ConstantOptimize && left.Value.ConstantExpression != null && right.Value.ConstantExpression != null)
+            {
+                var e = E.Equal(left.Value.ConstantExpression, right.Value.ConstantExpression).Reduce();
+                var v = E.Lambda(e).Compile().DynamicInvoke();
+                var i = (bool)v ? new Integer(1) : new Integer(0) as Expression;
+                return new SSA(mStatmentIndex, true, ast, new Store(new Address(CreateAlias()), i));
+            }
+
             return new SSA(mStatmentIndex, true, ast, new Store(new Address(CreateAlias()), new Equal(left.Source, right.Source)), left, right);
         }
 
@@ -271,7 +281,7 @@ namespace Tuyin.IR.Analysis.Passes
         {
             var right = Visit(ast.Right);
             var left = Visit(ast.Left);
-            if (left.Value.ConstantExpression != null && right.Value.ConstantExpression != null)
+            if (mSettings.ConstantOptimize && left.Value.ConstantExpression != null && right.Value.ConstantExpression != null)
             {
                 var e = E.GreaterThan(left.Value.ConstantExpression, right.Value.ConstantExpression).Reduce();
                 var v = E.Lambda(e).Compile().DynamicInvoke();
@@ -285,7 +295,7 @@ namespace Tuyin.IR.Analysis.Passes
         public override SSA VisitIdentifier(Identifier ast)
         {
             var refer = GetSSAReference(mVisitMode, null, ast.Value, mStatmentIndex);
-            if (refer.Value.ConstantExpression != null)
+            if (mSettings.ConstantOptimize && refer.Value.ConstantExpression != null)
                 return new SSA(mStatmentIndex, true, ast, new Store(new Address(CreateAlias()), refer.Value));
 
             return refer;
@@ -300,7 +310,7 @@ namespace Tuyin.IR.Analysis.Passes
         {
             var right = Visit(ast.Right);
             var left = Visit(ast.Left);
-            if (left.Value.ConstantExpression != null && right.Value.ConstantExpression != null)
+            if (mSettings.ConstantOptimize && left.Value.ConstantExpression != null && right.Value.ConstantExpression != null)
             {
                 var e = E.LeftShift(left.Value.ConstantExpression, right.Value.ConstantExpression).Reduce();
                 var v = E.Lambda(e).Compile().DynamicInvoke();
@@ -315,7 +325,7 @@ namespace Tuyin.IR.Analysis.Passes
         {
             var right = Visit(ast.Right);
             var left = Visit(ast.Left);
-            if (left.Value.ConstantExpression != null && right.Value.ConstantExpression != null)
+            if (mSettings.ConstantOptimize && left.Value.ConstantExpression != null && right.Value.ConstantExpression != null)
             {
                 var e = E.LessThan(left.Value.ConstantExpression, right.Value.ConstantExpression).Reduce();
                 var v = E.Lambda(e).Compile().DynamicInvoke();
@@ -351,7 +361,7 @@ namespace Tuyin.IR.Analysis.Passes
         {
             var right = Visit(ast.Right);
             var left = Visit(ast.Left);
-            if (left.Value.ConstantExpression != null && right.Value.ConstantExpression != null)
+            if (mSettings.ConstantOptimize && left.Value.ConstantExpression != null && right.Value.ConstantExpression != null)
             {
                 var e = E.Multiply(left.Value.ConstantExpression, right.Value.ConstantExpression).Reduce();
                 var v = E.Lambda(e).Compile().DynamicInvoke();
@@ -365,7 +375,7 @@ namespace Tuyin.IR.Analysis.Passes
         public override SSA VisitNeg(Neg ast)
         {
             var source = Visit(ast.Source);
-            if (source.Value.ConstantExpression != null)
+            if (mSettings.ConstantOptimize && source.Value.ConstantExpression != null)
             {
                 var e = E.Negate(source.Value.ConstantExpression).Reduce();
                 var v = E.Lambda(e).Compile().DynamicInvoke();
@@ -380,7 +390,7 @@ namespace Tuyin.IR.Analysis.Passes
         {
             var right = Visit(ast.Right);
             var left = Visit(ast.Left);
-            if (left.Value.ConstantExpression != null && right.Value.ConstantExpression != null)
+            if (mSettings.ConstantOptimize && left.Value.ConstantExpression != null && right.Value.ConstantExpression != null)
             {
                 var e = E.Or(left.Value.ConstantExpression, right.Value.ConstantExpression).Reduce();
                 var v = E.Lambda(e).Compile().DynamicInvoke();
@@ -395,7 +405,7 @@ namespace Tuyin.IR.Analysis.Passes
         {
             var right = Visit(ast.Right);
             var left = Visit(ast.Left);
-            if (left.Value.ConstantExpression != null && right.Value.ConstantExpression != null)
+            if (mSettings.ConstantOptimize && left.Value.ConstantExpression != null && right.Value.ConstantExpression != null)
             {
                 var e = E.Modulo(left.Value.ConstantExpression, right.Value.ConstantExpression).Reduce();
                 var v = E.Lambda(e).Compile().DynamicInvoke();
@@ -410,7 +420,7 @@ namespace Tuyin.IR.Analysis.Passes
         {
             var right = Visit(ast.Right);
             var left = Visit(ast.Left);
-            if (left.Value.ConstantExpression != null && right.Value.ConstantExpression != null)
+            if (mSettings.ConstantOptimize && left.Value.ConstantExpression != null && right.Value.ConstantExpression != null)
             {
                 var e = E.Subtract(left.Value.ConstantExpression, right.Value.ConstantExpression).Reduce();
                 var v = E.Lambda(e).Compile().DynamicInvoke();
@@ -425,7 +435,7 @@ namespace Tuyin.IR.Analysis.Passes
         {
             var right = Visit(ast.Right);
             var left = Visit(ast.Left);
-            if (left.Value.ConstantExpression != null && right.Value.ConstantExpression != null)
+            if (mSettings.ConstantOptimize && left.Value.ConstantExpression != null && right.Value.ConstantExpression != null)
             {
                 var e = E.RightShift(left.Value.ConstantExpression, right.Value.ConstantExpression).Reduce();
                 var v = E.Lambda(e).Compile().DynamicInvoke();
@@ -445,7 +455,7 @@ namespace Tuyin.IR.Analysis.Passes
         {
             var right = Visit(ast.Right);
             var left = Visit(ast.Left);
-            if (left.Value.ConstantExpression != null && right.Value.ConstantExpression != null)
+            if (mSettings.ConstantOptimize && left.Value.ConstantExpression != null && right.Value.ConstantExpression != null)
             {
                 var e = E.Power(left.Value.ConstantExpression, right.Value.ConstantExpression).Reduce();
                 var v = E.Lambda(e).Compile().DynamicInvoke();
@@ -473,7 +483,7 @@ namespace Tuyin.IR.Analysis.Passes
         public override SSA VisitReturn(Return ast)
         {
             var val = Visit(ast.Expression);
-            if(val.Value.ConstantExpression != null)
+            if(mSettings.ConstantOptimize && val.Value.ConstantExpression != null)
                 return new SSA(mStatmentIndex, true, ast, new Return(val.Value));
 
             return new SSA(mStatmentIndex, true, ast, new Return(val.Source), val);
@@ -654,14 +664,17 @@ namespace Tuyin.IR.Analysis.Passes
 
     class SSAAnalysisOpation 
     {
-        public SSAAnalysisOpation(Branch branch, IReadOnlyList<Statment> input)
+        public SSAAnalysisOpation(Branch branch, IReadOnlyList<Statment> input, EnvironmentSettings settings)
         {
             Branch = branch;
             Statments = input;
+            Settings = settings;
         }
 
         public Branch Branch { get; }
 
         public IReadOnlyList<Statment> Statments { get; }
+
+        public EnvironmentSettings Settings { get; }
     }
 }

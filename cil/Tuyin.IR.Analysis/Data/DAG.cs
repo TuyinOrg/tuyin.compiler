@@ -28,8 +28,6 @@ namespace Tuyin.IR.Analysis.Data
 
         public Metadatas Metadatas { get; }
 
-        public DAGNode Entry => Edges[0].Source as DAGNode;
-
         public override IReadOnlyList<AnalysisEdge> Edges { get; }
 
         public override IReadOnlyList<DAGNode> Vertices { get; }
@@ -150,13 +148,15 @@ namespace Tuyin.IR.Analysis.Data
                         for (var y = 0; y < cells.Length; y++)
                         {
                             var cell = cells[y];
-                            var color = store != null && store.Childrens.Colors.ContainsKey(cell.Row, cell.Column) ? store.Childrens.Colors[cell.Row, cell.Column] : default(DotColor);
+                            var color = store != null && store.Childrens.Colors.ContainsKey(cell.Row, cell.Column) ? 
+                                store.Childrens.Colors[cell.Row, cell.Column] : 
+                                default(DotColor);
 
                             row.AddCell(cell.Context, new DotStyledFont(null, null, color), init =>
                             {
                                 init.PortName = cell.PortName;
                                 init.ColumnSpan = cell.Column;
-                                init.RowSpan = cell.Row;
+                                init.RowSpan = cell.Row; 
                             });
                         }
                     });
@@ -255,6 +255,8 @@ namespace Tuyin.IR.Analysis.Data
         public ushort NodeIndex { get; }
 
         public int StatmentIndex { get; }
+
+        public int ReferenceAmount { get; internal set; }
 
         public DAGNode Parent { get; internal set; }
 
