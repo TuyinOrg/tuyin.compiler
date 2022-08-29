@@ -1,4 +1,4 @@
 digraph
 {
-    "label 1" [ label = "{ label\ 1 | store\ arg.1.0[a.1.0],ldc\ 1\nstore\ arg.1.0[a.1.1],ldc\ 2\nstore\ arg.1.0[b.1.0],ldc\ 3\nret\ arg.1.0\nstore\ arg.1.0[b.1.1],ldc\ 4\nstore\ a.1.0,ldc\ 2\nstore\ %5,add\ arg.1.0[b.1.1],a.1.0\nret\ %5 }", shape = record, style = rounded ]
+    "label 1" [ label = "{ label\ 1 | store\ arg.1.0[a.1.0],ldc\ 1\nstore\ arg.1.0[a.1.1],ldc\ 2\nstore\ arg.1.0[b.1.0],ldc\ 3\nret\ arg.1.0 | [×]store\ arg.1.0[b.1.1],ldc\ 4\n[×]store\ a.1.0,ldc\ 2\n[×]store\ %5,add\ arg.1.0[b.1.1],a.1.0\n[×]ret\ %5 }", shape = record, style = rounded ]
 }

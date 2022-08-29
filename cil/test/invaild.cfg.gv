@@ -3,6 +3,4 @@ digraph
     "label 1" [ label = "{ label\ 1 | ret\ ldc\ 1 | [×]goto\ 3 }", shape = record, style = rounded ]
     "label 2" [ label = "{ label\ 2 | ret\ ldc\ 2 }", shape = record, style = rounded ]
     "label 3" [ label = "{ label\ 3 | ret\ ldc\ 1 }", shape = record, style = rounded ]
-
-    "label 1" -> "label 3"
 }

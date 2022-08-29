@@ -111,7 +111,10 @@ namespace Tuyin.IR.Analysis.IO
             {
                 var node = nodes.Pop();
                 if (node is DAGMicrocodeNode code)
-                    codes.Add(code.Microcode);
+                    if (codes.Count == 0)
+                        codes.Add(code.Microcode);
+                    else
+                        codes.Insert(0, code.Microcode);
 
                 foreach (var right in node.Rights)
                     nodes.Push(right.Target);
