@@ -20,14 +20,17 @@ namespace Tuyin.IR.Analysis.Passes
             {
                 var scope = scopes[x];
                 var vaild = scope.End;
-                for (var i = scope.Start; i < scope.End; i++) 
+                if (input.Settings.ClearInvaildStatment)
                 {
-                    var stmt = input.Statments[i];
-                    if (stmt.NodeType == AstNodeType.Return || stmt.NodeType == AstNodeType.Goto)
+                    for (var i = scope.Start; i < scope.End; i++)
                     {
-                        vaild = i + 1;
-                        blocks[input.Branch.StatmentBranches[i]] = true;
-                        break;
+                        var stmt = input.Statments[i];
+                        if (stmt.NodeType == AstNodeType.Return || stmt.NodeType == AstNodeType.Goto)
+                        {
+                            vaild = i + 1;
+                            blocks[input.Branch.StatmentBranches[i]] = true;
+                            break;
+                        }
                     }
                 }
 
@@ -68,20 +71,18 @@ namespace Tuyin.IR.Analysis.Passes
 
     class CFGAnalysisOpation 
     {
-        public CFGAnalysisOpation(IReadOnlyList<Statment> input)
-            : this(new BranchAnalysis().Run(input), input)
-        {
-        }
-
-        public CFGAnalysisOpation(Branch branch, IReadOnlyList<Statment> input)
+        public CFGAnalysisOpation(Branch branch, IReadOnlyList<Statment> input, EnvironmentSettings settings)
         {
             Branch = branch;
             Statments = input;
+            Settings = settings;
         }
 
         public Branch Branch { get; }
 
         public IReadOnlyList<Statment> Statments { get; }
+
+        public EnvironmentSettings Settings { get; }
 
     }
 }
